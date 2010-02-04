@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Export-Package: net.mjahn.inspector.core;uses:="org.osgi.framework,org
+ .osgi.framework.hooks.service";version="1.0.0"
+Private-Package: net.mjahn.inspector.core.internal.*
+Built-By: mjahn
+Tool: Bnd-0.0.255
+Bundle-Name: net.mjahn.inspector.core
+Created-By: Apache Maven Bundle Plugin
+Bundle-Vendor: net.mjahn
+Build-Jdk: 1.6.0_17
+Bundle-Version: 0.1.0.SNAPSHOT
+Bnd-LastModified: 1265302440080
+Bundle-ManifestVersion: 2
+Bundle-Activator: net.mjahn.inspector.core.impl.Activator
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
+Bundle-Description: The inspector project aims to create an infrastruc
+ ture to analyze a running OSGi environment.
+Import-Package: net.mjahn.inspector.core;version="1.0.0",net.mjahn.ins
+ pector.core.impl,org.osgi.framework;version="1.5",org.osgi.framework.
+ hooks.service;version="1.0"
+Bundle-SymbolicName: net.mjahn.inspector.core
+Bundle-DocURL: http://osgi.mjahn.net
+
