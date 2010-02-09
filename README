@@ -7,7 +7,7 @@ Goals:
 	- mismatching version constraints on packages
 	- memory consumption on bundle level
 	- capabilities of the OSGi runtime (which core services in what version)
-- statistics about used frameworks an packages
+- statistics about used frameworks and packages
 - runtime bundle wiring (on package level)
 - lifecycle information (when did the framework really start)
 - http service to provide a convenient UI
@@ -18,3 +18,7 @@ Internal Requirements:
 - OSGi R4 runtime (best results with R4.2)
 - no other dependencies on 3rd party libraries or special OSGi framework implementations
 - started before any other bundle in order to track service service requests
+
+Features since 0.1.0:
+- discovery of unsatisfied service requests
+- tracking of pending service requests

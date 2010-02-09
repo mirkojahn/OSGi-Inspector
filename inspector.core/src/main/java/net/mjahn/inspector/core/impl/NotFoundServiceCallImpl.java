@@ -38,4 +38,27 @@ public class NotFoundServiceCallImpl implements NotFoundServiceCall {
 	public boolean isObtainAllServices(){
 		return obtainAll;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("NotFoundServiceCall [bundleId=");
+		builder.append(bundleId);
+		builder.append(", obtainAll=");
+		builder.append(obtainAll);
+		builder.append(", ");
+		if (serviceFilter != null) {
+			builder.append("serviceFilter=");
+			builder.append(serviceFilter);
+			builder.append(", ");
+		}
+		if (serviceName != null) {
+			builder.append("serviceName=");
+			builder.append(serviceName);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+	
+	
 }

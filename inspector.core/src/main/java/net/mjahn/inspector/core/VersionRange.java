@@ -3,8 +3,6 @@ package net.mjahn.inspector.core;
 import org.osgi.framework.Version;
 
 /**
- * @author "Mirko Jahn" <mirkojahn@gmail.com>
- * 
  * Immutable VersionRange representation.
  * 
  * Defines a VersionRange as described in the OSGi specification. The VersionRange class
@@ -12,6 +10,7 @@ import org.osgi.framework.Version;
  * name "Rang", also missleading at first fits for this as well, because in OSGi, this
  * refers to the version specified and ANY upper version there is.
  *
+ * @author "Mirko Jahn" <mirkojahn@gmail.com>
  * @version 1.0
  */
 public final class VersionRange {
@@ -22,8 +21,10 @@ public final class VersionRange {
     final String vRange;
 
     /**
-     * Constructor expecting an OSGi Version range string.
+     * Constructor expecting an OSGi Version range string. Please see the OSGi specification for 
+     * further details on this one.
      * 
+     * @since 1.0
      * @param range String representing an OSGi {@code org.osgi.framework.Version} or version range.
      */
     public VersionRange(String range) {

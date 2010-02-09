@@ -7,64 +7,46 @@ import java.util.List;
 import net.mjahn.inspector.core.Attribute;
 import net.mjahn.inspector.core.Directive;
 import net.mjahn.inspector.core.ExportedPackage;
-import net.mjahn.inspector.core.ImportedPackage;
-import net.mjahn.inspector.core.VersionRange;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Version;
 
-public final class ImportedPackageImpl implements ImportedPackage {
-	
+public class ExportedPackageImpl implements ExportedPackage {
 	private final String packageName;
-	private final VersionRange version;
-	private final boolean isOptional;
+	private final Version version;
 	private final ArrayList<Directive> directives;
 	private final ArrayList<Attribute> attributes;
 	private final long bundleId;
 	
-	public ImportedPackageImpl(Object[][] packageString, long bundle){
+	public ExportedPackageImpl(Object[][] packageString, long bundle){
 		bundleId = bundle;
 		// first position is the package name
 		packageName = (String) packageString[0][0];
 		
 		// second are directives
 		directives = Util.parseDirectives(packageString[1]);
-		// check if optional or not
-		isOptional = Util.isOptional(directives);
 		
 		// third are attributes
 		attributes = Util.parseAttributes(packageString[2]);
 		// set the default version for OSGi package export if not specified yet.
-		version = new VersionRange(Util.getVersionString(attributes));
+		version = new Version(Util.getVersionString(attributes));
+	}
+
+	public List<Attribute> getAttributes() {
+		return attributes;
+	}
+
+	public List<Directive> getDirectives() {
+		return directives;
 	}
 
 	public String getPackageName() {
 		return packageName;
 	}
 
-	public List<Attribute> getAttributes() {
-		return attributes;
-	}
-	
-	public List<Directive> getDirectives() {
-		return directives;
-	}
-
-	public VersionRange getVersion() {
+	public Version getVersion() {
 		return version;
-	}
-
-	public boolean isOptional() {
-		return isOptional;
-	}
-	
-	public boolean isCompatible(ExportedPackage exportedPackage){
-		// check if the names are equal and if there is an intersection between the range and the Version
-		if(exportedPackage.getPackageName().equals(getPackageName()) && 
-				version.isVersionInRange(exportedPackage.getVersion())){
-			return true;
-		}
-		return false;
 	}
 
 	public Bundle getDefiningBundle() {
@@ -75,10 +57,29 @@ public final class ImportedPackageImpl implements ImportedPackage {
 		}
 	}
 
+//	public String toString(){
+//		StringBuffer sb = new StringBuffer();
+//		sb.append(packageName);
+//		sb.append(getVersion());
+//		if(!directives.isEmpty()){
+//			Iterator<Directive> direcIter = directives.iterator();
+//			while(direcIter.hasNext()){
+//				sb.append(","+direcIter.next().toString());
+//			}
+//		}
+//		if(!attributes.isEmpty()){
+//			Iterator<Attribute> attrIter = attributes.iterator();
+//			while(attrIter.hasNext()){
+//				sb.append(","+attrIter.next().toString());
+//			}
+//		}
+//		sb.append(" by bundle ["+bundleId+"]");
+//		return sb.toString();
+//	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("ImportedPackage [");
+		builder.append("ExportedPackage [");
 		if (packageName != null) {
 			builder.append("packageName=");
 			builder.append(packageName);
@@ -114,5 +115,5 @@ public final class ImportedPackageImpl implements ImportedPackage {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

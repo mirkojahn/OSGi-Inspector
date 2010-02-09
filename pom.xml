@@ -54,17 +54,38 @@
   <description>The inspector project aims to create an infrastructure to analyze a running OSGi environment.</description>
 
   <properties>
-    <!--
-     | some example OSGi runtime properties
-    -->
+    <!-- Default Bundle Properties -->
+		<bundle.symbolicNameDirective />
+		<bundle.symbolicName>${groupId}.${artifactId}${bundle.symbolicNameDirective}</bundle.symbolicName>
+		<osgi.export.pkg>*</osgi.export.pkg>
+    <osgi.import.pkg>*</osgi.import.pkg>
+    <osgi.dynamic.import.pkg />
+    <osgi.private.pkg />
+    <osgi.bundle.activator />
+    <osgi.bundle.classpath />
+    <osgi.embed.dependency />
+    <osgi.fragment.host />
+    <osgi.require.bundle />
+    <osgi.spring.context />
+    <eclipse.supplement.bundle />
+    <osgi.bundle.vendor>net.mjahn</osgi.bundle.vendor>
+    <osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
+    <osgi.bundle.category>tools</osgi.bundle.category>
+
+		<!-- plugin versions -->
+		<bundle-plugin-version>2.0.1</bundle-plugin-version>
+		<release-plugin-version>2.0-beta-9</release-plugin-version>
+		<maven-pax-plugin>1.4</maven-pax-plugin>
+		
+		<!-- other properties -->
     <pax.exam.version>1.2.0</pax.exam.version>
   </properties>
 
   <packaging>pom</packaging>
 
   <modules>
-    <module>poms</module>
-    <module>provision</module>
+    <!--module>poms</module>
+    <module>provision</module-->
     <module>inspector.core</module>
     <!-- module>inspector.http</module>
     <module>inspector.spring</module>
@@ -111,8 +132,21 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
+	<build>
+	  	<pluginManagement>
+	  		<plugins>
+					<plugin>
+              <groupId>org.apache.felix</groupId>
+              <artifactId>maven-bundle-plugin</artifactId>
+              <version>${bundle-plugin-version}</version>  
+							<configuration>
+                  <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
+              </configuration>
+              <extensions>true</extensions>
+          </plugin>
+	  		</plugins>
+	  	</pluginManagement>
+	  <plugins>
       <!-- use pax exam maven plugin -->
       <!--
 		  Note: settings and dependencies for the final osgi runtime (TESTS) are just used in TestCases
@@ -121,7 +155,7 @@
         
 		  All other testcases will use their own settings/provisioning inside @Configure Methods.
 		  -->
-      <plugin>
+			<plugin>
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>maven-paxexam-plugin</artifactId>
         <executions>
@@ -135,17 +169,13 @@
         <configuration>
           <options>
             <platform>equinox</platform>
-            <!--profiles>log</profiles-->
           </options>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.ops4j</groupId>
         <artifactId>maven-pax-plugin</artifactId>
-        <version>1.4</version>
-        <!--
-           | some example Pax-Runner settings
-          -->
+        <version>${maven-pax-plugin}</version>
         <executions>
           <execution>
             <id>ide-support</id>
@@ -162,7 +192,114 @@
           <target>1.5</target>
         </configuration>
       </plugin>
+			<plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <configuration>
+              <unpackBundle>true</unpackBundle>
+              <manifestLocation>META-INF</manifestLocation>
+              <instructions>
+                  <!-- remove the qualifier from ANY versioning rule -->
+                  <_versionpolicy>"$(version;==;$(@))"</_versionpolicy>
+
+                  <!-- This doesn't work with the 2.0.1 version of the plug-in, but probably later-->
+                  <!--_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl-->
+                  <!--_versionpolicy-uses>[$(version;=;$(@)),$(version;+;$(@)))</_versionpolicy-uses-->
+                  <!-- enable simple spring xml file analysis -->
+                  <_plugin>aQute.lib.spring.SpringComponent</_plugin>
+                  <!-- Changed behavior in the > 2.0.0 bundle version forces us to do it this way -->
+                  <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+                  <Export-Package>${osgi.export.pkg}</Export-Package>
+                  <Import-Package>${osgi.import.pkg}</Import-Package>
+                  <DynamicImport-Package>${osgi.dynamic.import.pkg}</DynamicImport-Package>
+                  <Private-Package>${osgi.private.pkg}</Private-Package>
+                  <Bundle-Activator>${osgi.bundle.activator}</Bundle-Activator>
+                  <Bundle-ClassPath>${osgi.bundle.classpath}</Bundle-ClassPath>
+                  <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
+                  <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
+                  <Require-Bundle>${osgi.require.bundle}</Require-Bundle>
+                  <Bundle-Category>${osgi.bundle.category}</Bundle-Category>
+
+                  <!-- project specifics -->
+                  <Bundle-Description>${project.description}</Bundle-Description>
+                  <Bundle-Vendor>${osgi.bundle.vendor}</Bundle-Vendor>
+                  <Bundle-License>${osgi.bundle.license}</Bundle-License>
+
+                  <!-- custom headers (not according to OSGi-Spec standard) -->
+                  <Spring-Context>${osgi.spring.context}</Spring-Context>
+                  <Eclipse-SupplementBundle>${eclipse.supplement.bundle}</Eclipse-SupplementBundle>
+
+                  <Build-Time>$(now)</Build-Time>
+              </instructions>
+          </configuration>
+          <executions>
+              <execution>
+                  <id>bundle-manifest</id>
+                  <phase>process-classes</phase>
+                  <goals>    
+                      <goal>manifest</goal>
+                  </goals>   
+              </execution>
+              <execution>
+                  <id>bundle-install</id>
+                  <phase>install</phase>
+                  <goals>    
+                      <goal>install</goal>
+                  </goals>   
+              </execution>
+              <execution>
+                  <id>bundle-deploy</id>
+                  <phase>deploy</phase>
+                  <goals>    
+                      <goal>deploy</goal>
+                  </goals>   
+              </execution>
+          </executions>
+      </plugin>
+			
+      <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>${release-plugin-version}</version>
+              <configuration>
+                  <preparationGoals>clean verify install</preparationGoals>
+              </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>  
+            <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+          </archive> 
+        </configuration>
+      </plugin>  
+      <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <executions>
+              <execution>
+                  <id>attach-sources</id>
+                  <phase>verify</phase>
+                  <goals>
+                      <goal>jar</goal>
+                  </goals>
+              </execution>
+        </executions>
+      </plugin>
     </plugins>
+		
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+        </resource>
+        <resource>
+            <directory>.</directory>
+            <includes>
+                <include>META-INF/**/*</include>
+            </includes>
+        </resource>
+    </resources>
   </build>
 
   <reporting>
@@ -222,4 +359,14 @@
     </repository>
   </repositories>
 
+	<scm>
+  	<connection>scm:git:ssh://github.com/mirkojahn/OSGi-Inspector.git</connection>
+  	<developerConnection>scm:git:ssh://git@github.com:mirkojahn/OSGi-Inspector.git</developerConnection>
+  	<url>http://github.com/mirkojahn/OSGi-Inspector.git</url>
+  </scm>
+	<inceptionYear>2010</inceptionYear>
+  <issueManagement>
+  	<system>github</system>
+  	<url>http://github.com/mirkojahn/OSGi-Inspector/issues</url>
+  </issueManagement>
 </project>

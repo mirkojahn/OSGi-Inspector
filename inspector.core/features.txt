@@ -2,17 +2,30 @@ Must-Have features:
 
 OK - reveal not satisfied service look-ups 
 OK - pending service listeners
+OK - update TrackedBundleImpl if the bundle gets updated/ uninstalled -> BundleEventListener
+OK - Export/ Import-Package handling
+OK - disconnect R4.2 features from the Activator in a new Class with a try catch to also support 4.1 container.
+OK - Fragment support
+OK - check for DynamicImport statements and track them.
+- implement equals(), toString() and hashCode() for all "public, shared" classes!!!
+- check for require Bundle
+- provide a simple command line bundle to print out results
+- implement a test infrastructure to stay sane!
+- clean-up all TODO and FIXME statements!
+- code review stuff developed till now... check in first version
+
+Advanced stuff - maybe better for the reasoner:
+- track the actual wiring within the container (see old inspector implementation)
+- domain LifeCycle feature (also separate bundle)
+- analyze why a bundle didn't resolve/ or start
+- mark NOT satisfied optional imports!
 - potential Version conflicts 
 	* multiple packages imported in different (not overlapping) Versions
 	* Versions with qualifiers and without them (String compare problem)
-- update TrackedBundleImpl if the bundle gets updated/uninstalled
-- check for DynamicImport statements and track them.
-- check for require Bundle
+- figure out problems with fragments, not attaching to hosts (version conflicts, missing hosts...)
 - Error track for spring bundles not starting 
 	-> hint what might have caused it! 
 	--> create a reasoner bundle to do the analysis!
-- domain LifeCycle feature (also separate bundle)
-- analyze why a bundle didn't resolve/ or start
 
 Nice to have:
 - What packages are actually in the OSGi container?
