@@ -91,13 +91,5 @@ public interface FrameworkInspector {
      * @version 1.0
      */
     public Bundle getBundleForClass(final Class<?> clazz);
-//	List<? extends TrackedBundle> getAllConflictingBundles();
-	
-// TODO: move this method to the Reasoner
-//	/**
-//	 * 
-//	 * @since 1.0
-//	 * @return a list of PotentialImportConflicts or an empty list if none.
-//	 */
-//	List<? extends ImportedPackage> getPotentialConflictingPackages();
+
 }
