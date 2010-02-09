@@ -3,5 +3,7 @@
 .pmd
 .project
 .DS_Store
+MANIFEST.MF
+pom.properties
 .settings/
 target/

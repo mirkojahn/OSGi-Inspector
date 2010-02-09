@@ -200,10 +200,10 @@
               <manifestLocation>META-INF</manifestLocation>
               <instructions>
                   <!-- remove the qualifier from ANY versioning rule -->
-                  <_versionpolicy>"$(version;==;$(@))"</_versionpolicy>
+                  <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
 
                   <!-- This doesn't work with the 2.0.1 version of the plug-in, but probably later-->
-                  <!--_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl-->
+                  <_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl>
                   <!--_versionpolicy-uses>[$(version;=;$(@)),$(version;+;$(@)))</_versionpolicy-uses-->
                   <!-- enable simple spring xml file analysis -->
                   <_plugin>aQute.lib.spring.SpringComponent</_plugin>
