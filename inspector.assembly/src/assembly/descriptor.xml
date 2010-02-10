@@ -17,16 +17,6 @@
 			</includes>
 			<outputDirectory>./pax</outputDirectory>
 		</dependencySet>
-
-		<!-- aQute fileInstall -->
-		<dependencySet>
-			<useTransitiveDependencies>false</useTransitiveDependencies>
-			<unpack>false</unpack>
-			<includes>
-				<include>org.apache.felix:org.apache.felix.fileinstall</include>
-			</includes>
-			<outputDirectory>./bundles</outputDirectory>
-		</dependencySet>
     
     <!-- inspector -->
 		<dependencySet>
