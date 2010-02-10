@@ -85,7 +85,7 @@
 
   <modules>
     <module>inspector.core</module>
-    <!-- module>inspector.reasoner</module -->
+    <module>inspector.reasoner</module>
 		<!-- module>inspector.http</module>
     <module>inspector.spring</module>
     <module>stats</module>
@@ -197,6 +197,7 @@
           <param>--bundleStartLevel=4</param>
           <param>--workingDirectory=${project.build.directory}/runtime</param>
           <param>mvn:net.mjahn/inspector.core/${project.version}@1</param>
+					<param>mvn:net.mjahn/inspector.reasoner/${project.version}@2</param>
 				</provision>
       </configuration>
     </plugin>
