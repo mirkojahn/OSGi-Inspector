@@ -84,10 +84,9 @@
   <packaging>pom</packaging>
 
   <modules>
-    <!--module>poms</module>
-    <module>provision</module-->
     <module>inspector.core</module>
-    <!-- module>inspector.http</module>
+    <!-- module>inspector.reasoner</module -->
+		<!-- module>inspector.http</module>
     <module>inspector.spring</module>
     <module>stats</module>
     <module>lifecycle</module -->
@@ -185,6 +184,22 @@
           </execution>
         </executions>
       </plugin>
+			<plugin>
+          <groupId>org.ops4j</groupId>
+          <artifactId>maven-pax-plugin</artifactId>
+          <configuration>
+              <provision>
+          <param>--platform=equinox</param>
+          <param>--version=3.5.1</param>
+          <param>--ee=J2SE-1.5</param>
+          <param>--vmo=-Dosgi.classloader.lock=classname</param>
+          <param>--startLevel=5</param>
+          <param>--bundleStartLevel=4</param>
+          <param>--workingDirectory=${project.build.directory}/runtime</param>
+          <param>mvn:net.mjahn/inspector.core/${project.version}@1</param>
+				</provision>
+      </configuration>
+    </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -349,16 +364,13 @@
     </plugins>
   </reporting>
 
-  <repositories>
-    <repository>
-      <id>ops4j.release</id>
-      <url>http://repository.ops4j.org/mvn-snapshots</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
+	<distributionManagement>
+      <snapshotRepository>
+          <id>sonatype-nexus-snapshots</id>
+          <name>Sonatype Nexus Snapshots</name>
+          <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      </snapshotRepository>
+  </distributionManagement>
 	<scm>
   	<connection>scm:git:ssh://github.com/mirkojahn/OSGi-Inspector.git</connection>
   	<developerConnection>scm:git:ssh://git@github.com:mirkojahn/OSGi-Inspector.git</developerConnection>
