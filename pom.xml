@@ -86,6 +86,7 @@
   <modules>
     <module>inspector.core</module>
     <module>inspector.reasoner</module>
+		<module>inspector.assembly</module>
 		<!-- module>inspector.http</module>
     <module>inspector.spring</module>
     <module>stats</module>
