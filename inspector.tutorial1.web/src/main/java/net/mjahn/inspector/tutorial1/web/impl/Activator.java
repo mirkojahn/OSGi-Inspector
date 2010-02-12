@@ -21,10 +21,10 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	
-	private static BundleContext ctx;
 	private static FrameworkInspector fwInspector = null;
 	private ServiceTracker httpTracker;
-	private String serviceName = "helloworld";
+	private String serviceName = "/helloworld";
+	private BundleContext ctx = null;
 	
 	/**
 	 * {@inheritDoc}
@@ -33,7 +33,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	public void start(BundleContext context) throws Exception {
 		ctx = context;
 		httpTracker =
-            new ServiceTracker(ctx, HttpService.class.getName(), null);
+            new ServiceTracker(context, HttpService.class.getName(), this);
         httpTracker.open();
 //		fwInspector = new FrameworkInspector();
 		
@@ -44,11 +44,13 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		((HttpService)httpTracker.getService()).unregister(serviceName);
-	}
-
-	public static BundleContext getContext(){
-		return ctx;
+		if(httpTracker != null){
+			HttpService serv = ((HttpService)httpTracker.getService());
+			if(serv != null){
+				serv.unregister(serviceName);
+			}
+			httpTracker.close();
+		}
 	}
 	
 	public static FrameworkInspector getFrameworkInspector(){
@@ -57,27 +59,32 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 
 	public Object addingService(ServiceReference reference) {
 		Hashtable<String,String> initparams = new Hashtable<String,String>(); 
-		initparams.put( "name", "Hello World! - by OSGi Inspector" );
+		initparams.put( "name", serviceName );
 		javax.servlet.Servlet myServlet = new HttpServlet() { 
-			String	name = "helloworld";
+			private static final long serialVersionUID = -7398914113448648745L;
+			@SuppressWarnings("unused")
+			String	name = "/test";
+			
 			public void init( ServletConfig config ) { this.name = (String)
 				config.getInitParameter( "name" );
 			}
 			
 			public void doGet( HttpServletRequest req, HttpServletResponse rsp) throws IOException { 
 				rsp.setContentType( "text/plain" ); 
-				rsp.getWriter().println( this.name );
+				rsp.getWriter().println( "Hello World! - by OSGi Inspector" );
 			}
 		};
+		HttpService http = null;
 		try {
-			((HttpService)ctx.getService(reference)).registerServlet( serviceName, myServlet, initparams, null );
+			http = ((HttpService)ctx.getService(reference));
+			http.registerServlet( serviceName, myServlet, initparams, http.createDefaultHttpContext() );
 		} catch (ServletException e) {
 			e.printStackTrace();
 		} catch (NamespaceException e) {
 			e.printStackTrace();
 		} 
 		
-		return null;
+		return http;
 	}
 
 	public void modifiedService(ServiceReference reference, Object service) {

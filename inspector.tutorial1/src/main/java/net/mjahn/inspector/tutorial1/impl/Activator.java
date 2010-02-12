@@ -88,7 +88,7 @@ public class Activator implements BundleActivator, CommandProvider {
         						+ tb.getBundle().getSymbolicName());
     					Iterator iter = list.iterator();
     					while(iter.hasNext()){
-    						System.out.println("\n"+iter.next().toString());
+    						System.out.println(iter.next().toString());
     					}
     						
     				}
