@@ -366,6 +366,12 @@
   </reporting>
 
 	<distributionManagement>
+	  	<downloadUrl>http://github.com/mirkojahn/OSGi-Inspector/downloads</downloadUrl>
+	  	<site>
+	  		<id>inspector-web</id>
+	  		<name>OSGi-Inspector</name>
+	  		<url>http://github.com/mirkojahn/OSGi-Inspector</url>
+	  	</site>	
       <snapshotRepository>
           <id>sonatype-nexus-snapshots</id>
           <name>Sonatype Nexus Snapshots</name>
@@ -377,6 +383,33 @@
 		    <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		  </repository>
   </distributionManagement>
+
+	<repositories>
+	  	<repository>
+	  		<id>nexus-oss-snapshots</id>
+	  		<name>Nexus OSS Snapshot Repository</name>
+	  		<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+	  		<releases>
+	  			<enabled>false</enabled>
+	  		</releases>
+	  		<snapshots>
+	  			<updatePolicy>daily</updatePolicy>
+	  			<checksumPolicy>warn</checksumPolicy>
+	  		</snapshots>
+	  	</repository>
+	  	<repository>
+	  		<id>nexus-oss-staging</id>
+	  		<name>Nexus OSS Staging Repository</name>
+	  		<url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	  		<releases>
+	  			<updatePolicy>daily</updatePolicy>
+	  		</releases>
+	  		<snapshots>
+	  			<enabled>false</enabled>
+	  		</snapshots>
+	  	</repository>
+	  </repositories>
+
 	<scm>
   	<connection>scm:git:ssh://github.com/mirkojahn/OSGi-Inspector.git</connection>
   	<developerConnection>scm:git:ssh://git@github.com:mirkojahn/OSGi-Inspector.git</developerConnection>
