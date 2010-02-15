@@ -48,10 +48,21 @@
   <groupId>net.mjahn</groupId>
   <artifactId>inspector</artifactId>
   <version>0.1.0.SNAPSHOT</version>
-
   <name>net.mjahn.inspector (OSGi project)</name>
-
   <description>The inspector project aims to create an infrastructure to analyze a running OSGi environment.</description>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>inspector.core</module>
+    <module>inspector.reasoner</module>
+		<module>inspector.tutorial1</module>
+		<module>inspector.tutorial1.web</module>
+		<!-- module>inspector.http</module>
+    <module>inspector.spring</module>
+    <module>stats</module>
+    <module>lifecycle</module -->
+		<module>inspector.assembly</module>
+  </modules>
 
   <properties>
     <!-- Default Bundle Properties -->
@@ -80,20 +91,6 @@
 		<!-- other properties -->
     <pax.exam.version>1.2.0</pax.exam.version>
   </properties>
-
-  <packaging>pom</packaging>
-
-  <modules>
-    <module>inspector.core</module>
-    <module>inspector.reasoner</module>
-		<module>inspector.assembly</module>
-		<module>inspector.tutorial1</module>
-		<module>inspector.tutorial1.web</module>
-		<!-- module>inspector.http</module>
-    <module>inspector.spring</module>
-    <module>stats</module>
-    <module>lifecycle</module -->
-  </modules>
 
   <dependencies>
     <dependency>
