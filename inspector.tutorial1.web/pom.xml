@@ -11,6 +11,9 @@
   <groupId>net.mjahn</groupId>
   <artifactId>inspector.tutorial1.web</artifactId>
   <version>0.1.0.SNAPSHOT</version>
+  <reporting>
+  	<outputDirectory>../target/site/inspector.tutorial1.web</outputDirectory>
+  </reporting>
   
   <properties>
   	<bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>

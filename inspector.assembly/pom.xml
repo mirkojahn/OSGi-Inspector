@@ -15,6 +15,9 @@
 
     <name>net.mjahn.inspector.assembly (Assembly)</name>
 
+		<reporting>
+	  	<outputDirectory>../target/site/inspector.assembly</outputDirectory>
+	  </reporting>
     <build>
       <plugins>
         <plugin>
@@ -62,6 +65,11 @@
         <dependency>
             <groupId>net.mjahn</groupId>
             <artifactId>inspector.reasoner</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+				<dependency>
+            <groupId>net.mjahn</groupId>
+            <artifactId>inspector.web</artifactId>
             <version>${pom.version}</version>
         </dependency>
 				<dependency>
