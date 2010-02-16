@@ -11,12 +11,14 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class Activator implements BundleActivator, SynchronousBundleListener {
+public class Activator implements BundleActivator, SynchronousBundleListener, FrameworkListener {
 	
 	private static BundleContext ctx;
 	private static FrameworkInspectorImpl fwInspector;
@@ -30,7 +32,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		System.out.println("Starting Bundle to inspect the OSGi Framework!");
+//		System.out.println("Starting Bundle to inspect the OSGi Framework!");
 		ctx = context;
 		packageAdminTracker =
             new ServiceTracker(ctx, PackageAdmin.class.getName(), null);
@@ -45,14 +47,19 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
 			// this might fail if not ran in an OSGi R4 container.
 			// nothing to log or worry about!
 		}
-		// create listener for newly installed bundles
 		Bundle[] bundles = ctx.getBundles();
 		if(bundles != null ){
 			for(int i = 0; i<bundles.length;i++){
 				fwInspector.getTrackedBundle(bundles[i].getBundleId());
 			}
 		}
+		
+		// create listener for newly installed bundles
 		ctx.addBundleListener(this);
+		
+		// create listener for FrameworkEvents
+		ctx.addFrameworkListener(this);
+		
 		// create a Tracker for Extensions with the Inspector instance
 		// TODO: implement Extension mechanism
 		
@@ -122,5 +129,10 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
 	
 	public static PackageAdmin getPackageAdmin(){
 		return (PackageAdmin)packageAdminTracker.getService();
+	}
+
+	public void frameworkEvent(FrameworkEvent event) {
+		fwInspector.addFrameworkEvent(event);
+		
 	}
 }

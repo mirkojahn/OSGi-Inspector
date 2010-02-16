@@ -1,8 +1,10 @@
 package net.mjahn.inspector.core;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkEvent;
 
 /**
  * This is the entry class to get access to all the analysis data gathered by this bundle.
@@ -91,5 +93,39 @@ public interface FrameworkInspector {
      * @version 1.0
      */
     public Bundle getBundleForClass(final Class<?> clazz);
+    
+    /**
+     * Obtain the latest FrameworkEvent, no matter what it was.
+     * 
+     * @since 1.0
+     * @return the latest FrameworkEvent
+     */
+    public FrameworkEvent getFrameworkEvent();
+    
+    /**
+     * Get all FrameworkEvents that have been thrown so far in chronological order,
+     * in which they've been received.
+     * 
+     * @since 1.0
+     * @return get ALL FrameworkEvents gathered.
+     */
+    public List<FrameworkEvent> getFrameworkEvents();
 
+    /**
+     * Get ALL FrameworkEvent of the given bundle that have been thrown so far in chronological order,
+     * in which they've been received.
+     * 
+     * @since 1.0
+     * @param id the bundleID of the bundle you're interested in.
+     * @return the FrameworkEvents of this particular bundle.
+     */
+    public List<FrameworkEvent> getFrameworkEvents(long id);
+    
+    /**
+     * Get all FrameworkEvents that indicate some sort of an error in chronological order,
+     * in which they've been received.
+     * @since 1.0
+     * @return
+     */
+    public List<FrameworkEvent> getErrorFrameworkEvents();
 }

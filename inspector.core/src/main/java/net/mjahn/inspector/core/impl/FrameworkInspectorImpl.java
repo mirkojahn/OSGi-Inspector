@@ -3,6 +3,7 @@ package net.mjahn.inspector.core.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.mjahn.inspector.core.ExportedPackage;
@@ -10,13 +11,59 @@ import net.mjahn.inspector.core.FrameworkInspector;
 import net.mjahn.inspector.core.ImportedPackage;
 import net.mjahn.inspector.core.OSGiRuntime;
 import net.mjahn.inspector.core.TrackedBundle;
+import static net.mjahn.inspector.core.Constants.INITIAL_BUNDLE_AMOUNT_PROPERTY;
+import static net.mjahn.inspector.core.Constants.INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE;
+import static net.mjahn.inspector.core.Constants.FRAMEWORK_EVENT_COUNT_PROPERTY;
+import static net.mjahn.inspector.core.Constants.FRAMEWORK_EVENT_COUNT_DEFAULT_VALUE;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.packageadmin.PackageAdmin;
 
 public class FrameworkInspectorImpl implements FrameworkInspector {
+	
+	private ArrayList<TrackedBundleImpl> trackedBundles;
+	private LinkedList<FrameworkEvent> fwEvents;
+	private LinkedList<FrameworkEvent> fwErrorEvents;
+	private int allowedFwEvents;
+	
+	public FrameworkInspectorImpl() {
+		String initialBundleCount = System.getProperty(INITIAL_BUNDLE_AMOUNT_PROPERTY);
+		if(initialBundleCount != null && !initialBundleCount.equals("")){
+			try{
+				int count = Integer.parseInt(initialBundleCount);
+				if(count > 0){
+					trackedBundles = new ArrayList<TrackedBundleImpl>(count);
+				}else {
+					trackedBundles = new ArrayList<TrackedBundleImpl>(INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE);
+				}
+			} catch (Exception e) {
+				trackedBundles = new ArrayList<TrackedBundleImpl>(INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE);
+			}
+		} else {
+			trackedBundles = new ArrayList<TrackedBundleImpl>(INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE);
+		}
+		
+		String initialEventCount = System.getProperty(FRAMEWORK_EVENT_COUNT_PROPERTY);
+		if(initialEventCount != null && !initialEventCount.equals("")){
+			try{
+				int count = Integer.parseInt(initialEventCount);
+				if(count > 0){
+					allowedFwEvents = count;
+				}else {
+					allowedFwEvents = FRAMEWORK_EVENT_COUNT_DEFAULT_VALUE;
+				}
+			} catch (Exception e) {
+				allowedFwEvents = FRAMEWORK_EVENT_COUNT_DEFAULT_VALUE;
+			}
+		} else {
+			allowedFwEvents = FRAMEWORK_EVENT_COUNT_DEFAULT_VALUE;
+		}
+		
+		fwErrorEvents = new LinkedList<FrameworkEvent>();
+		fwEvents = new LinkedList<FrameworkEvent>();
+	}
 
-	private ArrayList<TrackedBundleImpl> trackedBundles = new ArrayList<TrackedBundleImpl>();
 	
 	public List<? extends TrackedBundle> getAllTrackedBundles() {
 		return getAllTrackedBundleImpls();
@@ -61,11 +108,11 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 		return null;
 	}
 	
-	public void remove(long id){
+	void remove(long id){
 		trackedBundles.set((int)id, null);
 	}
 	
-	public void update(long id){
+	void update(long id){
 		trackedBundles.remove(id);
 		// add the new one (has the same id)
 		getTrackedBundle(id);
@@ -176,5 +223,44 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
         }
         return classes.toArray(new Class<?>[classes.size()]);
     }
+
+    // TODO: think about a more lightweight fw Event
+	
+	synchronized void addFrameworkEvent(FrameworkEvent event){
+		if(fwEvents.size()>allowedFwEvents){
+			FrameworkEvent ev = fwEvents.getFirst();
+			fwEvents.remove(0);
+			fwErrorEvents.remove(ev);
+		}
+		fwEvents.add(event);
+	}
+	
+	public List<FrameworkEvent> getErrorFrameworkEvents() {
+		return fwErrorEvents;
+	}
+
+	public FrameworkEvent getFrameworkEvent() {
+		return fwEvents.getLast();
+	}
+
+	public List<FrameworkEvent> getFrameworkEvents() {
+		return fwEvents;
+	}
+
+	public List<FrameworkEvent> getFrameworkEvents(long id) {
+		ArrayList<FrameworkEvent> list = new ArrayList<FrameworkEvent>(100);
+		Iterator<FrameworkEvent> iter = fwEvents.iterator();
+		while(iter.hasNext()){
+			FrameworkEvent event = iter.next();
+			try {
+				if(event.getBundle().getBundleId() == id){
+					list.add(event);
+				}
+			}catch (Exception e) {
+				// do nothing... in OSGi anything can happen
+			}
+		}
+		return list;
+	}
     
 }
