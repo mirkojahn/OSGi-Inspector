@@ -55,7 +55,7 @@
   <modules>
     <module>inspector.core</module>
     <module>inspector.reasoner</module>
-		<module>inspector.web</module>
+		<!--module>inspector.web</module-->
 		<module>inspector.tutorial1</module>
 		<module>inspector.tutorial1.web</module>
 		<!-- module>inspector.http</module>
