@@ -55,6 +55,7 @@
   <modules>
     <module>inspector.core</module>
     <module>inspector.reasoner</module>
+		<module>inspector.web</module>
 		<module>inspector.tutorial1</module>
 		<module>inspector.tutorial1.web</module>
 		<!-- module>inspector.http</module>
@@ -90,6 +91,7 @@
 		
 		<!-- other properties -->
     <pax.exam.version>1.2.0</pax.exam.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
@@ -400,7 +402,7 @@
 	  	<repository>
 	  		<id>nexus-oss-staging</id>
 	  		<name>Nexus OSS Staging Repository</name>
-	  		<url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	  		<url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 	  		<releases>
 	  			<updatePolicy>daily</updatePolicy>
 	  		</releases>
@@ -415,7 +417,14 @@
   	<developerConnection>scm:git:ssh://git@github.com:mirkojahn/OSGi-Inspector.git</developerConnection>
   	<url>http://github.com/mirkojahn/OSGi-Inspector.git</url>
   </scm>
+
+	<ciManagement>
+  	<system>Hudson</system>
+  	<url>http://osgi.kicks-ass.org:8080/hudson</url>
+  </ciManagement>
+
 	<inceptionYear>2010</inceptionYear>
+	
   <issueManagement>
   	<system>github</system>
   	<url>http://github.com/mirkojahn/OSGi-Inspector/issues</url>
