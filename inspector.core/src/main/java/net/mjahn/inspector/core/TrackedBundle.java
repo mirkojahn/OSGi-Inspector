@@ -28,7 +28,7 @@ public interface TrackedBundle {
 	 * @since 1.0
 	 * @return a list with the services this bundles is listening for or an empty array
 	 */
-	List<ListenerInfo> getAllAddedServicesListens();
+	List<ListenerInfo> getAllAddedServiceListeners();
 
 	/**
 	 * <p>Obtain the ServiceListeners removed by this bundle.</p>
@@ -36,9 +36,9 @@ public interface TrackedBundle {
 	 * <b>This feature requires an OSGi R4.2 container!</b>
 	 * 
 	 * @since 1.0
-	 * @return the list of all ServiceListneres removed by this bundle
+	 * @return the list of all ServiceListeneres removed by this bundle
 	 */
-	List<ListenerInfo> getAllRemovedServicesListens();
+	List<ListenerInfo> getAllRemovedServiceListeners();
 
 	/**
 	 * <p>Obtain service calls that try to obtain a concrete service but failed to do so. This
@@ -116,4 +116,10 @@ public interface TrackedBundle {
 	 */
 	List<TrackedBundle> getAttachedFragmentBundles();
 	
+	/**
+	 * Provides a JSON valid representation of this object.
+	 * @since 1.0
+	 * @return a valid JSON representation of this object.
+	 */
+	String toJSON();
 }

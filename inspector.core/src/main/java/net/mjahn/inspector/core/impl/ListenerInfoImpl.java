@@ -36,4 +36,21 @@ public class ListenerInfoImpl implements ListenerInfo {
 		return li.toString();
 	}
 
+	public String toJSON() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{\"listenerInfo\": {");
+		// the filter
+		builder.append("\"filter\":\"");
+		if (li.getFilter() != null) {
+			builder.append(li.getFilter());
+		}
+		builder.append("\", ");
+		// is removed
+		builder.append("\"removed\":\"");
+		builder.append(li.isRemoved());
+		builder.append("\" ");
+		builder.append("}}");
+		return builder.toString();
+	}
+
 }

@@ -321,4 +321,12 @@ public final class VersionRange {
     	}
     }
 
+    /**
+	 * Provides a JSON valid representation of this object.
+	 * @since 1.0
+	 * @return a valid JSON representation of this object.
+	 */
+	public String toJSON(){
+		return "{\"versionRange\":\""+toString()+"\"}";
+	}
 }

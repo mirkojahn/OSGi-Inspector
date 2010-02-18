@@ -62,7 +62,7 @@ public class CoreHooks implements FindHook, ListenerHook {
 			// + "' with filter: "+ li.getFilter());
 			long id = li.getBundleContext().getBundle().getBundleId();
 			TrackedBundleImpl tb = fwAnalyzer.getTrackedBundleImpl(id);
-			tb.removedListenerForService(li);
+			tb.removeListenerForService(li);
 		}
 
 	}

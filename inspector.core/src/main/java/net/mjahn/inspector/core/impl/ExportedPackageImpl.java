@@ -116,4 +116,55 @@ public class ExportedPackageImpl implements ExportedPackage {
 		return builder.toString();
 	}
 
+	public String toJSON() {
+			StringBuilder builder = new StringBuilder();
+			builder.append("{\"exportedPackage\": {");
+			builder.append("\"packageName\":\"");
+			if (packageName != null) {
+				builder.append(packageName);
+			}
+			builder.append("\", ");
+			
+			builder.append(" \"version\":\"");
+			if (version != null) {
+				builder.append(getVersion());
+			}
+			builder.append("\", ");
+			
+			builder.append("\"attributes\": [");
+			if (attributes != null) {
+				Iterator<Attribute> iter = attributes.iterator();
+				while(iter.hasNext()){
+					Attribute att = iter.next();
+					if(att.getName().equalsIgnoreCase(Constants.VERSION_ATTRIBUTE)){
+						continue;
+					}
+					builder.append(att.toJSON());
+					if(iter.hasNext()){
+						builder.append(", ");
+					}
+				}
+			}
+			builder.append("], ");
+			
+			builder.append("\"directives\": [");
+			if (directives != null) {
+				Iterator<Directive> iter = directives.iterator();
+				while(iter.hasNext()){
+					Directive dir =iter.next();
+					builder.append(dir.toJSON());
+					if(iter.hasNext()){
+						builder.append(", ");
+					}
+				}
+			}
+			builder.append("], ");
+			
+			builder.append("\"definingBundle\":\"");
+			builder.append(bundleId);
+			builder.append("\"");
+			
+			builder.append("}}");
+			return builder.toString();
+		}
 }

@@ -65,4 +65,11 @@ public interface ImportedPackage {
 	 * @return the bundle instance (loaded dynamically, so it can return null if uninstalled)
 	 */
 	public Bundle getDefiningBundle();
+	
+	/**
+	 * Provides a JSON valid representation of this object.
+	 * @since 1.0
+	 * @return a valid JSON representation of this object.
+	 */
+	String toJSON();
 }

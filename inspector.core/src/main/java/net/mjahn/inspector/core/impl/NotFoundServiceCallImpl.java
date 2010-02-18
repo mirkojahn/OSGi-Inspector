@@ -59,6 +59,37 @@ public class NotFoundServiceCallImpl implements NotFoundServiceCall {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+	public String toJSON() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{\"notFoundServiceCall\": {");
+		// the bundle
+		builder.append("\"bundle\":\"");
+		if (getBundle() != null) {
+			builder.append(getBundle());
+		}
+		builder.append("\", ");
+		
+		// the service filter
+		builder.append("\"serviceFilter\":\"");
+		if (getServiceFilter() != null) {
+			builder.append(getServiceFilter());
+		}
+		builder.append("\", ");
+		
+		// the service name
+		builder.append("\"serviceName\":\"");
+		if (getServiceName() != null) {
+			builder.append(getServiceName());
+		}
+		builder.append("\", ");
+		
+		// is obtain all
+		builder.append("\"obtainAllServices\":\"");
+		builder.append(isObtainAllServices());
+		builder.append("\" ");
+		
+		builder.append("}}");
+		return builder.toString();
+	}
 	
 }

@@ -42,4 +42,27 @@ public class Directive {
 		return builder.toString();
 	}
 	
+	/**
+	 * Provides a JSON valid representation of this object.
+	 * @since 1.0
+	 * @return a valid JSON representation of this object.
+	 */
+	public String toJSON() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{ \"directive\": { ");
+
+		builder.append("\"directiveName\": \"");
+		if (m_name != null) {
+			// only the value or noting if empty
+			builder.append(m_name);
+		}
+		builder.append("\",");
+		builder.append("\"directiveValue\": \"");
+		if (m_value != null) {
+			// only the value or noting if empty
+			builder.append(m_value);
+		}
+		builder.append("\"}}");
+		return builder.toString();
+	}
 }

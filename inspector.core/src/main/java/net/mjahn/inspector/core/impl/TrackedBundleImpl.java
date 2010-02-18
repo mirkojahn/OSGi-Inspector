@@ -18,7 +18,7 @@ public class TrackedBundleImpl implements TrackedBundle {
 	private final long bundleId;
 
 	private ArrayList<ListenerInfo> listeningForService = new ArrayList<ListenerInfo>();
-	private ArrayList<ListenerInfo> notListeningForService = new ArrayList<ListenerInfo>();
+	private ArrayList<ListenerInfo> notLongerListeningForService = new ArrayList<ListenerInfo>();
 	private ArrayList<NotFoundServiceCall> notFoundServiceCalls = new ArrayList<NotFoundServiceCall>();
 	private ArrayList<ExportedPackage> exportedPackages = null;
 	private ArrayList<ImportedPackage> importedPackages = null;
@@ -47,28 +47,28 @@ public class TrackedBundleImpl implements TrackedBundle {
 			org.osgi.framework.hooks.service.ListenerHook.ListenerInfo info) {
 		if (info != null) {
 			synchronized (guard) {
-				notListeningForService.remove(new ListenerInfoImpl(info));
+				notLongerListeningForService.remove(new ListenerInfoImpl(info));
 				listeningForService.add(new ListenerInfoImpl(info));
 			}
 		}
 	}
 
-	public List<ListenerInfo> getAllAddedServicesListens() {
+	public List<ListenerInfo> getAllAddedServiceListeners() {
 		return listeningForService;
 	}
 
-	public void removedListenerForService(
+	public void removeListenerForService(
 			org.osgi.framework.hooks.service.ListenerHook.ListenerInfo info) {
 		if (info != null) {
 			synchronized (guard) {
 				listeningForService.remove(new ListenerInfoImpl(info));
-				notListeningForService.add(new ListenerInfoImpl(info));
+				notLongerListeningForService.add(new ListenerInfoImpl(info));
 			}
 		}
 	}
 
-	public List<ListenerInfo> getAllRemovedServicesListens() {
-		return notListeningForService;
+	public List<ListenerInfo> getAllRemovedServiceListeners() {
+		return notLongerListeningForService;
 	}
 
 	public void addNotFoundServiceCall(NotFoundServiceCall serviceCall) {
@@ -226,7 +226,9 @@ public class TrackedBundleImpl implements TrackedBundle {
 			while(iter.hasNext()){
 				ImportedPackage impPack = iter.next();
 				builder.append(impPack.toString());
-				builder.append(", ");
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
 			}
 			packages = null;
 		}
@@ -237,9 +239,10 @@ public class TrackedBundleImpl implements TrackedBundle {
 			while(iter.hasNext()){
 				ExportedPackage expPack = iter.next();
 				builder.append(expPack.toString());
-				builder.append(", ");
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
 			}
-			packages = null;
 		}
 		packages = getImportedPackages();
 		if (packages.size() > 0) {
@@ -247,7 +250,9 @@ public class TrackedBundleImpl implements TrackedBundle {
 			while(iter.hasNext()){
 				ImportedPackage impPack = iter.next();
 				builder.append(impPack.toString());
-				builder.append(", ");
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
 			}
 			packages = null;
 		}
@@ -256,7 +261,9 @@ public class TrackedBundleImpl implements TrackedBundle {
 			while(iter.hasNext()){
 				ListenerInfo info = iter.next();
 				builder.append(info.toString());
-				builder.append(", ");
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
 			}
 		}
 		if (notFoundServiceCalls != null) {
@@ -264,18 +271,216 @@ public class TrackedBundleImpl implements TrackedBundle {
 			while(iter.hasNext()){
 				NotFoundServiceCall info = iter.next();
 				builder.append(info.toString());
-				builder.append(", ");
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
 			}
 		}
-		if (notListeningForService != null) {
-			Iterator<ListenerInfo> iter = notListeningForService.iterator();
+		if (notLongerListeningForService != null) {
+			Iterator<ListenerInfo> iter = notLongerListeningForService.iterator();
 			while(iter.hasNext()){
 				ListenerInfo info = iter.next();
 				builder.append(info.toString());
-				builder.append(", ");
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
 			}
 		}
-		builder.append("]");
+		
+		// isFragment
+		builder.append(", isFragment: ");
+		builder.append(isFragment());
+		
+		// get all hosts for this fragment 
+		if (isFragment()) {
+			List<TrackedBundle> tb = getHostBundles();
+			if(tb.size()>0){
+				builder.append(", hostBundles: ");
+				Iterator<TrackedBundle> iter = tb.iterator();
+				while(iter.hasNext()){
+					TrackedBundle bun = iter.next();
+					if(bun != null){
+						builder.append(" bundleId: ");
+						builder.append(bun.getBundle());
+						if(iter.hasNext()){
+							builder.append(", ");
+						}
+					}
+				}
+			}
+		}
+		
+		// get all fragments for this host 
+		if (!isFragment()) {
+			List<TrackedBundle> tb = getAttachedFragmentBundles();
+			if(tb.size()>0){
+				builder.append(",  attachedFragmentBundles: [");
+				Iterator<TrackedBundle> iter = tb.iterator();
+				while(iter.hasNext()){
+					TrackedBundle bun = iter.next();
+					if(bun != null){
+						builder.append("{ bundleId: ");
+						builder.append(bun.getBundle());
+						if(iter.hasNext()){
+							builder.append(", ");
+						}
+					}
+				}
+			}
+		}
+		return builder.toString();
+	}
+
+	public String toJSON() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{\"trackedBundle\": {");
+		// the bundle
+		builder.append("\"bundleId\":\"");
+		if (getBundle() != null) {
+			builder.append(getBundle());
+		}
+		builder.append("\", ");
+
+		// List all dynamic imports
+		List<ImportedPackage> packages = getDynamicImportedPackage();
+		if (packages.size() > 0) {
+			builder.append("\"dynamicImportedPackages\": [");
+			Iterator<ImportedPackage> iter = packages.iterator();
+			while(iter.hasNext()){
+				ImportedPackage impPack = iter.next();
+				builder.append(impPack.toJSON());
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
+			}
+			builder.append("], ");
+			packages = null;
+		}
+		// has dynamic import(s)
+		builder.append("\"dynamicImport\":\"");
+		builder.append(hasDynamicImport());
+		builder.append("\"");
+		
+		// list exported Packages
+		List<ExportedPackage> exPackages = getExportedPackages();
+		if (exPackages.size() > 0) {
+			builder.append(", \"exportedPackages\": [");
+			Iterator<ExportedPackage> iter = exPackages.iterator();
+			while(iter.hasNext()){
+				ExportedPackage expPack = iter.next();
+				builder.append(expPack.toJSON());
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
+			}
+			builder.append("]");
+		}
+		
+		// list imported packages
+		packages = getImportedPackages();
+		if (packages.size() > 0) {
+			builder.append(", \"importedPackages\": [");
+			Iterator<ImportedPackage> iter = packages.iterator();
+			while(iter.hasNext()){
+				ImportedPackage impPack = iter.next();
+				builder.append(impPack.toJSON());
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
+			}
+			packages = null;
+			builder.append("]");
+		}
+		
+		// list the services this bundle is listening for
+		if (listeningForService != null) {
+			builder.append(", \"allAddedServiceListeners\": [");
+			Iterator<ListenerInfo> iter = listeningForService.iterator();
+			while(iter.hasNext()){
+				ListenerInfo info = iter.next();
+				builder.append(info.toJSON());
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
+			}
+			builder.append("]");
+		}
+		
+		// list all service not found calls
+		if (notFoundServiceCalls != null) {
+			builder.append(", \"allNotFoundServiceCalls\": [");
+			Iterator<NotFoundServiceCall> iter = notFoundServiceCalls.iterator();
+			while(iter.hasNext()){
+				NotFoundServiceCall info = iter.next();
+				builder.append(info.toJSON());
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
+			}
+			builder.append("]");
+		}
+		
+		// get all services this bundle is no longer listening for 
+		if (notLongerListeningForService != null) {
+			builder.append(", \"allRemovedServiceListeners\": [");
+			Iterator<ListenerInfo> iter = notLongerListeningForService.iterator();
+			while(iter.hasNext()){
+				ListenerInfo info = iter.next();
+				builder.append(info.toJSON());
+				if(iter.hasNext()){
+					builder.append(", ");
+				}
+			}
+			builder.append("]");
+		}
+		
+		// isFragment
+		builder.append("\", fragment\":\"");
+		builder.append(isFragment());
+		builder.append("\"");
+		
+		// get all hosts for this fragment 
+		if (isFragment()) {
+			List<TrackedBundle> tb = getHostBundles();
+			if(tb.size()>0){
+				builder.append(", \"hostBundles\": [");
+				Iterator<TrackedBundle> iter = tb.iterator();
+				while(iter.hasNext()){
+					TrackedBundle bun = iter.next();
+					if(bun != null){
+						builder.append("{\"bundleId\":\"");
+						builder.append(bun.getBundle());
+						builder.append("\"");
+						if(iter.hasNext()){
+							builder.append(", ");
+						}
+					}
+				}
+				builder.append("]");
+			}
+		}
+		
+		// get all fragments for this host 
+		if (!isFragment()) {
+			List<TrackedBundle> tb = getAttachedFragmentBundles();
+			if(tb.size()>0){
+				builder.append(", \"attachedFragmentBundles\": [");
+				Iterator<TrackedBundle> iter = tb.iterator();
+				while(iter.hasNext()){
+					TrackedBundle bun = iter.next();
+					if(bun != null){
+						builder.append("{\"bundleId\":\"");
+						builder.append(bun.getBundle());
+						builder.append("\"");
+						if(iter.hasNext()){
+							builder.append(", ");
+						}
+					}
+				}
+				builder.append("]");
+			}
+		}
+		builder.append("}}");
 		return builder.toString();
 	}
 

@@ -12,4 +12,10 @@ public interface OSGiRuntime {
 	
 	// TODO: list provides OSGi services, Implementation specific services, the versions of the various services, the osgi version,...
 
+	/**
+	 * Provides a JSON valid representation of this object.
+	 * @since 1.0
+	 * @return a valid JSON representation of this object.
+	 */
+	String toJSON();
 }
