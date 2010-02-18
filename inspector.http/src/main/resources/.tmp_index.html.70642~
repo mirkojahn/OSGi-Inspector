@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>OSGi Inspector</title>
+		<link type="text/css" href="res/css/flick/jquery-ui-1.7.2.custom.css" rel="stylesheet" />	
+		<script type="text/javascript" src="res/js/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="res/js/jquery-ui-1.7.2.custom.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				// Tabs
+				$('#tabs').tabs();
+	
+
+				// Dialog			
+				$('#dialog').dialog({
+					autoOpen: false,
+					width: 600,
+					buttons: {
+						"Ok": function() { 
+							$(this).dialog("close"); 
+						}, 
+						"Cancel": function() { 
+							$(this).dialog("close"); 
+						} 
+					}
+				});
+				
+				// Dialog Link
+				$('#dialog_link').click(function(){
+					$('#dialog').dialog('open');
+					return false;
+				});
+
+				
+				// Progressbar
+				$("#progressbar").progressbar({
+					value: 20 
+				});
+				
+				//hover states on the static widgets
+				$('#dialog_link, ul#icons li').hover(
+					function() { $(this).addClass('ui-state-hover'); }, 
+					function() { $(this).removeClass('ui-state-hover'); }
+				);
+				
+			});
+		</script>
+		<style type="text/css">
+			/*demo page css*/
+			body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 50px;}
+			.demoHeaders { margin-top: 2em; }
+			#dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
+			#dialog_link span.ui-icon {margin: 0 5px 0 0;position: absolute;left: .2em;top: 50%;margin-top: -8px;}
+			ul#icons {margin: 0; padding: 0;}
+			ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+			ul#icons span.ui-icon {float: left; margin: 0 4px;}
+		</style>	
+	</head>
+	<body>
+	<h1>OSGi Inspector</h1>	
+		<!-- Tabs -->
+		<div id="tabs">
+			<ul>
+				<li><a href="#tabs-1">Potential Problems</a></li>
+				<li><a href="#tabs-2">OSGi Container in detail</a></li>
+				<li><a href="#tabs-3">Deployed Bundles</a></li>
+				<li><a href="#tabs-4">Help</a></li>
+			</ul>
+			<div id="tabs-1">
+				<!-- Highlight / Error -->
+				<h2 class="demoHeaders">Highlight / Error</h2>
+				<div class="ui-widget">
+					<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
+						<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+						<strong>Hey!</strong> Sample ui-state-highlight style.</p>
+					</div>
+				</div>
+				<br/>
+				<div class="ui-widget">
+					<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"> 
+						<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+						<strong>Alert:</strong> Sample ui-state-error style.</p>
+					</div>
+				</div>
+			</div>
+			<div id="tabs-2">
+				<h2>Nothing there yet!</h2>
+			</div>
+			<div id="tabs-3">
+				<h2>What a shame, also nothing there yet.</h2>
+			</div>
+			<div id="tabs-4">
+				<h2>FAQ</h2>
+				<p>
+					<b>Question 1:</b> Some question:<br/>
+					nothing so far.
+				</p>
+			</div>
+		</div>
+
+		
+
+	</body>
+</html>
+
+

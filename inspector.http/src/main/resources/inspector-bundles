@@ -1,0 +1,32 @@
+				<div id="bundles-contain" class="ui-widget">
+					<table id="all_bundles" class="ui-widget ui-widget-content">
+						<thead>
+							<tr class="ui-widget-header ">
+								<th>ID</th>
+								<th>State</th>
+								<th>Type</th>
+								<th>Bundle-SymbolicName</th>
+								<th>Status</th>
+								<th>&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>0</td>
+								<td>ACTIVE</td>
+								<td>Bundle</td>
+								<td>system.bundle</td>
+								<td>green</td>
+								<td><button id="inspect-bundle" class="ui-button ui-state-default ui-corner-all">Inspect</button></td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>RESOLVED</td>
+								<td>FRAGMENT</td>
+								<td>net.mjahn.test.fragment</td>
+								<td>yellow</td>
+								<td><button id="inspect-bundle" class="ui-button ui-state-default ui-corner-all">Inspect</button></td>								
+							</tr>
+						</tbody>
+					</table>
+				</div>
