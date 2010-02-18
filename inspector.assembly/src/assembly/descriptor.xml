@@ -23,9 +23,39 @@
 			<useTransitiveDependencies>false</useTransitiveDependencies>
 			<unpack>false</unpack>
 			<includes>
-				<include>net.mjahn:inspector*</include>
+				<include>net.mjahn:inspector.core</include>
+				<include>net.mjahn:inspector.reasoner</include>
 			</includes>
 			<outputDirectory>./inspector</outputDirectory>
+		</dependencySet>
+		<dependencySet>
+			<useTransitiveDependencies>false</useTransitiveDependencies>
+			<unpack>false</unpack>
+			<includes>
+				<include>net.mjahn:inspector.http</include>
+			</includes>
+			<outputDirectory>./inspector-ui</outputDirectory>
+		</dependencySet>
+		<dependencySet>
+			<useTransitiveDependencies>true</useTransitiveDependencies>
+			<unpack>false</unpack>
+			<includes>
+				<include>org.osgi:org.osgi.compendium</include>
+				<include>org.mortbay.jetty:jetty</include>
+				<include>org.mortbay.jetty:jetty-util</include>
+				<include>org.mortbay.jetty:jetty-sslengine</include>
+				<include>org.mortbay.jetty:servlet-api-2.5</include>
+				<include>org.apache.felix:org.apache.felix.http.jetty</include>
+			</includes>
+			<outputDirectory>./inspector-util</outputDirectory>
+		</dependencySet>
+		<dependencySet>
+			<useTransitiveDependencies>false</useTransitiveDependencies>
+			<unpack>false</unpack>
+			<includes>
+				<include>net.mjahn:inspector.tutorial1*</include>
+			</includes>
+			<outputDirectory>./inspector-tut1</outputDirectory>
 		</dependencySet>
   </dependencySets>
   <fileSets>

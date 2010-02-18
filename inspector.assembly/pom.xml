@@ -15,9 +15,6 @@
 
     <name>net.mjahn.inspector.assembly (Assembly)</name>
 
-    <reporting>
-        <outputDirectory>../target/site/inspector.assembly</outputDirectory>
-    </reporting>
     <build>
       <plugins>
         <plugin>
@@ -67,11 +64,11 @@
             <artifactId>inspector.reasoner</artifactId>
             <version>${pom.version}</version>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>net.mjahn</groupId>
-            <artifactId>inspector.web</artifactId>
+            <artifactId>inspector.http</artifactId>
             <version>${pom.version}</version>
-        </dependency-->
+        </dependency>
         <dependency>
             <groupId>net.mjahn</groupId>
             <artifactId>inspector.tutorial1</artifactId>
@@ -86,6 +83,7 @@
             <groupId>org.ops4j.pax.runner</groupId>
             <artifactId>pax-runner</artifactId>
             <version>1.4.0</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>

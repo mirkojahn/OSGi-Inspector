@@ -55,21 +55,21 @@
   <modules>
     <module>inspector.core</module>
     <module>inspector.reasoner</module>
-		<!--module>inspector.web</module-->
-		<module>inspector.tutorial1</module>
-		<module>inspector.tutorial1.web</module>
-		<!-- module>inspector.http</module>
+    <module>inspector.tutorial1</module>
+    <module>inspector.tutorial1.web</module>
+    <module>inspector.http</module>
+    <!-- module>inspector.http</module>
     <module>inspector.spring</module>
     <module>stats</module>
     <module>lifecycle</module -->
-		<module>inspector.assembly</module>
+    <module>inspector.assembly</module>
   </modules>
 
   <properties>
     <!-- Default Bundle Properties -->
-		<bundle.symbolicNameDirective />
-		<bundle.symbolicName>${groupId}.${artifactId}${bundle.symbolicNameDirective}</bundle.symbolicName>
-		<osgi.export.pkg>*</osgi.export.pkg>
+    <bundle.symbolicNameDirective />
+    <bundle.symbolicName>${groupId}.${artifactId}${bundle.symbolicNameDirective}</bundle.symbolicName>
+    <osgi.export.pkg></osgi.export.pkg>
     <osgi.import.pkg>*</osgi.import.pkg>
     <osgi.dynamic.import.pkg />
     <osgi.private.pkg />
@@ -80,18 +80,19 @@
     <osgi.require.bundle />
     <osgi.spring.context />
     <eclipse.supplement.bundle />
+    <osgi.execution.env>J2SE-1.5, JavaSE-1.6</osgi.execution.env>
     <osgi.bundle.vendor>net.mjahn</osgi.bundle.vendor>
     <osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
     <osgi.bundle.category>tools</osgi.bundle.category>
 
-		<!-- plugin versions -->
-		<bundle-plugin-version>2.0.1</bundle-plugin-version>
-		<release-plugin-version>2.0-beta-9</release-plugin-version>
-		<maven-pax-plugin>1.4</maven-pax-plugin>
-		
-		<!-- other properties -->
+    <!-- plugin versions -->
+    <bundle-plugin-version>2.0.1</bundle-plugin-version>
+    <release-plugin-version>2.0-beta-9</release-plugin-version>
+    <maven-pax-plugin>1.4</maven-pax-plugin>
+
+    <!-- other properties -->
     <pax.exam.version>1.2.0</pax.exam.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
@@ -122,41 +123,66 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
-      <version>4.2.0</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <version>4.2.0</version>
-      <optional>true</optional>
     </dependency>
   </dependencies>
 
-	<build>
-	  	<pluginManagement>
-	  		<plugins>
-					<plugin>
-              <groupId>org.apache.felix</groupId>
-              <artifactId>maven-bundle-plugin</artifactId>
-              <version>${bundle-plugin-version}</version>  
-							<configuration>
-                  <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
-              </configuration>
-              <extensions>true</extensions>
-          </plugin>
-	  		</plugins>
-	  	</pluginManagement>
-	  <plugins>
-      <!-- use pax exam maven plugin -->
-      <!--
-		  Note: settings and dependencies for the final osgi runtime (TESTS) are just used in TestCases
-		  that annotated with this:
-		  @RunWith( MavenConfiguredJUnit4TestRunner.class )
-        
-		  All other testcases will use their own settings/provisioning inside @Configure Methods.
-		  -->
-			<plugin>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.core</artifactId>
+        <version>4.2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.compendium</artifactId>
+        <version>4.2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-sslengine</artifactId>
+        <version>6.1.14</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-util</artifactId>
+        <version>6.1.14</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty</artifactId>
+        <version>6.1.14</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>servlet-api-2.5</artifactId>
+        <version>6.1.14</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.http.jetty</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+  	
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>${bundle-plugin-version}</version>  
+          <configuration>
+            <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
+          </configuration>
+          <extensions>true</extensions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>maven-paxexam-plugin</artifactId>
         <executions>
@@ -186,21 +212,21 @@
           </execution>
         </executions>
       </plugin>
-			<plugin>
-          <groupId>org.ops4j</groupId>
-          <artifactId>maven-pax-plugin</artifactId>
-          <configuration>
-              <provision>
-          <param>--platform=equinox</param>
-          <param>--version=3.5.1</param>
-          <param>--ee=J2SE-1.5</param>
-          <param>--vmo=-Dosgi.classloader.lock=classname</param>
-          <param>--startLevel=5</param>
-          <param>--bundleStartLevel=4</param>
-          <param>--workingDirectory=${project.build.directory}/runtime</param>
-          <param>mvn:net.mjahn/inspector.core/${project.version}@1</param>
-					<param>mvn:net.mjahn/inspector.reasoner/${project.version}@2</param>
-				</provision>
+      <plugin>
+        <groupId>org.ops4j</groupId>
+        <artifactId>maven-pax-plugin</artifactId>
+        <configuration>
+          <provision>
+            <param>--platform=equinox</param>
+            <param>--version=3.5.1</param>
+            <param>--ee=J2SE-1.5</param>
+            <param>--vmo=-Dosgi.classloader.lock=classname</param>
+            <param>--startLevel=5</param>
+            <param>--bundleStartLevel=4</param>
+            <param>--workingDirectory=${project.build.directory}/runtime</param>
+            <param>mvn:net.mjahn/inspector.core/${project.version}@1</param>
+            <param>mvn:net.mjahn/inspector.reasoner/${project.version}@2</param>
+          </provision>
       </configuration>
     </plugin>
       <plugin>
@@ -210,7 +236,7 @@
           <target>1.5</target>
         </configuration>
       </plugin>
-			<plugin>
+      <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
           <configuration>
@@ -222,7 +248,7 @@
 
                   <!-- This doesn't work with the 2.0.1 version of the plug-in, but probably later-->
                   <_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl>
-                  <!--_versionpolicy-uses>[$(version;=;$(@)),$(version;+;$(@)))</_versionpolicy-uses-->
+                  <_versionpolicy-uses>[$(version;=;$(@)),$(version;+;$(@)))</_versionpolicy-uses>
                   <!-- enable simple spring xml file analysis -->
                   <_plugin>aQute.lib.spring.SpringComponent</_plugin>
                   <!-- Changed behavior in the > 2.0.0 bundle version forces us to do it this way -->
@@ -237,11 +263,12 @@
                   <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
                   <Require-Bundle>${osgi.require.bundle}</Require-Bundle>
                   <Bundle-Category>${osgi.bundle.category}</Bundle-Category>
-
+                  <_removeheaders>Private-Package,Include-Resource,Built-By</_removeheaders>
                   <!-- project specifics -->
                   <Bundle-Description>${project.description}</Bundle-Description>
                   <Bundle-Vendor>${osgi.bundle.vendor}</Bundle-Vendor>
                   <Bundle-License>${osgi.bundle.license}</Bundle-License>
+                  <Bundle-RequiredExecutionEnvironment>${osgi.execution.env}</Bundle-RequiredExecutionEnvironment>
 
                   <!-- custom headers (not according to OSGi-Spec standard) -->
                   <Spring-Context>${osgi.spring.context}</Spring-Context>
@@ -274,7 +301,6 @@
               </execution>
           </executions>
       </plugin>
-			
       <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
@@ -305,8 +331,30 @@
               </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.6.1</version>
+        <configuration>
+          <!-- Default configuration for all reports -->
+          <minmemory>128m</minmemory>
+          <maxmemory>512m</maxmemory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>aggregate</id>
+            <goals>
+              <goal>aggregate</goal>
+            </goals>
+            <phase>site</phase>
+            <configuration>
+              <!-- Specific configuration for the aggregate report -->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-		
+
     <resources>
         <resource>
             <directory>src/main/resources</directory>
@@ -315,6 +363,7 @@
             <directory>.</directory>
             <includes>
                 <include>META-INF/**/*</include>
+                <include>OSGI-INF/**/*</include>
             </includes>
         </resource>
     </resources>
@@ -325,10 +374,23 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.6.1</version>
         <configuration>
           <minmemory>128m</minmemory>
           <maxmemory>512m</maxmemory>
         </configuration>
+        <reportSets>
+          <reportSet>
+            <id>aggregate</id>
+            <configuration>
+              <!-- Specific configuration for the aggregate report -->
+              
+            </configuration>
+            <reports>
+              <report>aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
@@ -367,96 +429,96 @@
     </plugins>
   </reporting>
 
-	<distributionManagement>
-	  	<downloadUrl>http://github.com/mirkojahn/OSGi-Inspector/downloads</downloadUrl>
-	  	<site>
-	  		<id>inspector-web</id>
-	  		<name>OSGi-Inspector</name>
-	  		<url>http://github.com/mirkojahn/OSGi-Inspector</url>
-	  	</site>	
-      <snapshotRepository>
-          <id>sonatype-nexus-snapshots</id>
-          <name>Sonatype Nexus Snapshots</name>
-          <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-      </snapshotRepository>
-			<repository>
-		    <id>sonatype-nexus-staging</id>
-		    <name>Nexus Release Repository</name>
-		    <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		  </repository>
+  <distributionManagement>
+    <downloadUrl>http://github.com/mirkojahn/OSGi-Inspector/downloads</downloadUrl>
+    <site>
+      <id>inspector-web</id>
+      <name>OSGi-Inspector</name>
+      <url>http://github.com/mirkojahn/OSGi-Inspector</url>
+    </site>	
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <name>Nexus Release Repository</name>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
   </distributionManagement>
 
-	<repositories>
-	  	<repository>
-	  		<id>nexus-oss-snapshots</id>
-	  		<name>Nexus OSS Snapshot Repository</name>
-	  		<url>http://oss.sonatype.org/content/repositories/snapshots</url>
-	  		<releases>
-	  			<enabled>false</enabled>
-	  		</releases>
-	  		<snapshots>
-	  			<updatePolicy>daily</updatePolicy>
-	  			<checksumPolicy>warn</checksumPolicy>
-	  		</snapshots>
-	  	</repository>
-	  	<repository>
-	  		<id>nexus-oss-staging</id>
-	  		<name>Nexus OSS Staging Repository</name>
-	  		<url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-	  		<releases>
-	  			<updatePolicy>daily</updatePolicy>
-	  		</releases>
-	  		<snapshots>
-	  			<enabled>false</enabled>
-	  		</snapshots>
-	  	</repository>
-	  </repositories>
+  <repositories>
+    <repository>
+      <id>nexus-oss-snapshots</id>
+      <name>Nexus OSS Snapshot Repository</name>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>nexus-oss-staging</id>
+      <name>Nexus OSS Staging Repository</name>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      <releases>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
-	<scm>
-  	<connection>scm:git:ssh://github.com/mirkojahn/OSGi-Inspector.git</connection>
-  	<developerConnection>scm:git:ssh://git@github.com:mirkojahn/OSGi-Inspector.git</developerConnection>
-  	<url>http://github.com/mirkojahn/OSGi-Inspector.git</url>
+  <scm>
+    <connection>scm:git:ssh://github.com/mirkojahn/OSGi-Inspector.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:mirkojahn/OSGi-Inspector.git</developerConnection>
+    <url>http://github.com/mirkojahn/OSGi-Inspector.git</url>
   </scm>
 
-	<ciManagement>
-  	<system>Hudson</system>
-  	<url>http://osgi.kicks-ass.org:8080/hudson</url>
+  <ciManagement>
+    <system>Hudson</system>
+    <url>http://osgi.kicks-ass.org:8080/hudson</url>
   </ciManagement>
 
-	<inceptionYear>2010</inceptionYear>
-	
+  <inceptionYear>2010</inceptionYear>
+
   <issueManagement>
-  	<system>github</system>
-  	<url>http://github.com/mirkojahn/OSGi-Inspector/issues</url>
+    <system>github</system>
+    <url>http://github.com/mirkojahn/OSGi-Inspector/issues</url>
   </issueManagement>
 
-	<profiles>
-	  <profile>
-	    <id>release-sign-artifacts</id>
-	    <activation>
-	      <property>
-	        <name>performRelease</name>
-	        <value>true</value>
-	      </property>
-	    </activation>
-	    <build>
-	      <plugins>
-	        <plugin>
-	          <groupId>org.apache.maven.plugins</groupId>
-	          <artifactId>maven-gpg-plugin</artifactId>
-	          <version>1.0-alpha-4</version>
-	          <executions>
-	            <execution>
-	              <id>sign-artifacts</id>
-	              <phase>verify</phase>
-	              <goals>
-	                <goal>sign</goal>
-	              </goals>
-	            </execution>
-	          </executions>
-	        </plugin>
-	      </plugins>
-	    </build>
-	  </profile>
-	</profiles>
+  <profiles>
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.0-alpha-4</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

@@ -26,8 +26,7 @@
 
 # the inspector libraries, started first
 ../inspector
-../inspector-util
-../inspector-ui
+../inspector-tut1
 
 # After this line, do what ever you like. 
 # Here are some examples usually useful.
@@ -42,12 +41,12 @@
 #wrap:mvn:javax.servlet/jstl/1.2$Export-Package=*;version="1.2.0"
 
 # provide a simple drop-in folder for hotdeployment
-mvn:org.apache.felix/org.apache.felix.fileinstall/2.0.8
+#mvn:org.apache.felix/org.apache.felix.fileinstall/2.0.8
 
 # provide some bundle to showcase the tutorial
-#mvn:org.apache.felix/javax.servlet/1.0.0
-#mvn:org.osgi/org.osgi.compendium/4.2.0
+mvn:org.apache.felix/javax.servlet/1.0.0@nostart
+mvn:org.osgi/org.osgi.compendium/4.2.0@nostart
 # you could also wrap a regular jar as an OSGi bundle
 #wrap:mvn:javax.servlet/servlet-api/2.4$Export-Package=*;version="2.4.0"@nostart
-#mvn:org.apache.felix/org.apache.felix.http.jetty/1.0.1
+mvn:org.apache.felix/org.apache.felix.http.jetty/1.0.1@nostart
 

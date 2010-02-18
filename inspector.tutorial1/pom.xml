@@ -11,9 +11,6 @@
   <groupId>net.mjahn</groupId>
   <artifactId>inspector.tutorial1</artifactId>
   <version>0.1.0.SNAPSHOT</version>
-  <reporting>
-  	<outputDirectory>../target/site/inspector.tutorial1</outputDirectory>
-  </reporting>
   
   <properties>
   	<bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>
@@ -40,7 +37,7 @@
 	    <groupId>org.sonatype.tycho</groupId>
 	    <artifactId>org.eclipse.osgi</artifactId>
 	    <version>3.5.1.R35x_v20090827</version>
-			<optional>true</optional>
+		<optional>true</optional>
 	</dependency>
   </dependencies>
   

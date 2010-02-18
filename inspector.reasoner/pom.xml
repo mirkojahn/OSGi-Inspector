@@ -11,9 +11,6 @@
   <groupId>net.mjahn</groupId>
   <artifactId>inspector.reasoner</artifactId>
   <version>0.1.0.SNAPSHOT</version>
-  <reporting>
-  	<outputDirectory>../target/site/inspector.reasoner</outputDirectory>
-  </reporting>
   
   <properties>
   	<bundle.symbolicNameDirective>singleton:=true</bundle.symbolicNameDirective>
