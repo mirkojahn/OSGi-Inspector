@@ -17,10 +17,10 @@
     <osgi.bundle.activator>net.mjahn.inspector.tutorial1.impl.Activator</osgi.bundle.activator>
     <osgi.private.pkg>net.mjahn.inspector.tutorial1.*</osgi.private.pkg>
 		<osgi.import.pkg>org.osgi.framework;version=[1.3.0','2.0.0),
-			net.mjahn.inspector.core;version=[1.0.0','2.0.0),
+			net.mjahn.inspector.core;version=[0.1.0','1.0.0),
 			*
 		</osgi.import.pkg>
-		<osgi.export.pkg>net.mjahn.inspector.reasoner;version=1.0.0</osgi.export.pkg>
+		<osgi.export.pkg>net.mjahn.inspector.reasoner;version=0.1.0</osgi.export.pkg>
   </properties>
 
   <name>${groupId}.${artifactId}</name>
