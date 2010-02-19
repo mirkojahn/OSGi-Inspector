@@ -5,5 +5,8 @@
 .DS_Store
 MANIFEST.MF
 pom.properties
+project.properties
+build.properties
+META-INF/
 .settings/
 target/
