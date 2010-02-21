@@ -1,0 +1,11 @@
+The source code of this bundle is licensed under two different licenses, because the used JavaScript library
+does not provide the ASL license. For that reason, the files coming from JQuery are licensed and MIT. 
+Everything else is licensed under the ASL 2.0. 
+
+NOTE: JQuery is also licensed und GPL (dual licensed), but because I don't like the terms of the GPL, 
+especially with regard to company usage, I decided to stick to the less restrictive MIT license that in
+fact is compatible with the ASL 2.0. I am not a lawyer, so don't take my word for it and check for yourself.
+
+However, to use the inspector API, you're not required to use this bundle. If you're in doubt, just stick to
+the plain API's, get inspired by this bundle to see what you could do and use your imagination as the only 
+limit ;-)
