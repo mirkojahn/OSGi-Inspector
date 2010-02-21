@@ -13,6 +13,13 @@ public interface OSGiRuntime {
 	// TODO: list provides OSGi services, Implementation specific services, the versions of the various services, the osgi version,...
 
 	/**
+	 * Check all RuntimeStartProviders if the framework has been started.
+	 * 
+	 * @since 1.0
+	 * @return true if it looks like the framework has been started.
+	 */
+	boolean hasBeenStarted(); 
+	/**
 	 * Provides a JSON valid representation of this object.
 	 * @since 1.0
 	 * @return a valid JSON representation of this object.

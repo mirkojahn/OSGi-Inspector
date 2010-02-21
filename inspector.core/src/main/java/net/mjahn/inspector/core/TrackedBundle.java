@@ -64,6 +64,15 @@ public interface TrackedBundle {
 	public List<ImportedPackage> getImportedPackages();
 	
 	/**
+	 * Similar to {@code getImportedPackages()}, but also takes into account, if this bundle has fragments attached and adds
+	 * those to the list of imported packages.
+	 * 
+	 * @since 1.0
+	 * @return a list with all packages (host and fragment bundles) or an empty list if none.
+	 */
+	public List<ImportedPackage> getAllImportedPackages();
+	
+	/**
 	 * <p>Obtain the list of all packages this bundle provides as an export. This not the actual 
 	 * export consumed by another bundle in the container, but the definition as found in the 
 	 * manifest file. Gathering of this is done once lazy up-on the first request.</p>
@@ -72,6 +81,15 @@ public interface TrackedBundle {
 	 * @return a list with the packages exported by this Bundle as defined in the manifest file  or an empty list (never null).
 	 */
 	public List<ExportedPackage> getExportedPackages();
+	
+	/**
+	 * Similar to {@code getExportedPackages()}, but also takes into account, if this bundle has fragments attached and adds
+	 * those to the list of exported packages.
+	 * 
+	 * @since 1.0
+	 * @return a list with all packages (host and fragment bundles) or an empty list if none.
+	 */
+	public List<ExportedPackage> getAllExportedPackages();
 	
 	/**
 	 * Checks if this bundle is a fragment bundle. The behavior is different to {@code getHostBundles()}, because this method
@@ -106,7 +124,15 @@ public interface TrackedBundle {
 	 * @since 1.0
 	 * @return the list of dynamically imported packages or an empty list if none.
 	 */
-	List<ImportedPackage> getDynamicImportedPackage();
+	List<ImportedPackage> getDynamicImportedPackages();
+	
+	/**
+	 * Similar to {@code getDynamicImportedPackages()}, but also takes into account, if this bundle has fragments attached and adds
+	 * those to the list of dynamic imported packages.
+	 * 
+	 * @since 1.0
+	 * @return a list with all dynamic import package statements (host and fragment bundles) or an empty list if none.
+	 */List<ImportedPackage> getAllDynamicImportedPackages();
 	
 	/**
 	 * Obtain the fragments attached to this as host bundle.
@@ -122,4 +148,6 @@ public interface TrackedBundle {
 	 * @return a valid JSON representation of this object.
 	 */
 	String toJSON();
+	
+	
 }

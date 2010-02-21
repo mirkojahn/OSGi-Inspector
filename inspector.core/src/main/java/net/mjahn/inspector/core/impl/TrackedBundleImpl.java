@@ -14,6 +14,12 @@ import net.mjahn.inspector.core.TrackedBundle;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 
+/**
+ * Implementation of the TrackedBundle interface.
+ * 
+ * @author "Mirko Jahn" <mirkojahn@gmail.com>
+ * @version 1.0
+ */
 public class TrackedBundleImpl implements TrackedBundle {
 	private final long bundleId;
 
@@ -33,6 +39,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		bundleId = id;
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getBundle()
+	 */
 	public Bundle getBundle() {
 		Bundle b = null;
 		try {
@@ -43,7 +54,7 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return b;
 	}
 
-	public void addedListenerForService(
+	void addedListenerForService(
 			org.osgi.framework.hooks.service.ListenerHook.ListenerInfo info) {
 		if (info != null) {
 			synchronized (guard) {
@@ -53,11 +64,16 @@ public class TrackedBundleImpl implements TrackedBundle {
 		}
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getAllAddedServiceListeners()
+	 */
 	public List<ListenerInfo> getAllAddedServiceListeners() {
 		return listeningForService;
 	}
 
-	public void removeListenerForService(
+	void removeListenerForService(
 			org.osgi.framework.hooks.service.ListenerHook.ListenerInfo info) {
 		if (info != null) {
 			synchronized (guard) {
@@ -67,18 +83,33 @@ public class TrackedBundleImpl implements TrackedBundle {
 		}
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getAllRemovedServiceListeners()
+	 */
 	public List<ListenerInfo> getAllRemovedServiceListeners() {
 		return notLongerListeningForService;
 	}
 
-	public void addNotFoundServiceCall(NotFoundServiceCall serviceCall) {
+	void addNotFoundServiceCall(NotFoundServiceCall serviceCall) {
 		notFoundServiceCalls.add(serviceCall);
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getAllNotFoundServiceCalls()
+	 */
 	public List<NotFoundServiceCall> getAllNotFoundServiceCalls() {
 		return notFoundServiceCalls;
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getImportedPackages()
+	 */
 	@SuppressWarnings("unchecked")
 	public List<ImportedPackage> getImportedPackages() {
 		// lazy parsing
@@ -99,6 +130,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return importedPackages;
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getExportedPackages()
+	 */
 	@SuppressWarnings("unchecked")
 	public List<ExportedPackage> getExportedPackages() {
 		synchronized (guardExp) {
@@ -119,6 +155,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		}
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getHostBundles()
+	 */
 	public List<TrackedBundle> getHostBundles() {
 		if (isFragment()) {
 			ArrayList<TrackedBundle> bHosts = new ArrayList<TrackedBundle>();
@@ -136,6 +177,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return new ArrayList<TrackedBundle>();
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getAttachedFragmentBundles()
+	 */
 	public List<TrackedBundle> getAttachedFragmentBundles() {
 		ArrayList<TrackedBundle> bFragments = new ArrayList<TrackedBundle>();
 		Bundle[] fragments = Activator.getPackageAdmin().getFragments(
@@ -152,6 +198,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return new ArrayList<TrackedBundle>();
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#isFragment()
+	 */
 	public boolean isFragment() {
 		getBundle().getHeaders();
 		String fragHost = (String) getBundle().getHeaders().get(
@@ -159,8 +210,13 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return (fragHost != null ? true : false);
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getDynamicImportedPackages()
+	 */
 	@SuppressWarnings("unchecked")
-	public List<ImportedPackage> getDynamicImportedPackage() {
+	public List<ImportedPackage> getDynamicImportedPackages() {
 		synchronized (guardDynImp) {
 			// lazy parsing
 			if (dynImportedPackages != null) {
@@ -179,6 +235,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		}
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#hasDynamicImport()
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean hasDynamicImport() {
 		Dictionary headers = getBundle().getHeaders();
@@ -187,6 +248,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return (packagesString != null ? true : false);
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -195,6 +261,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return result;
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -213,13 +284,18 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return true;
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("TrackedBundleImpl [bundleId=");
 		builder.append(bundleId);
 		builder.append(", ");
-		List<ImportedPackage> packages = getDynamicImportedPackage();
+		List<ImportedPackage> packages = getDynamicImportedPackages();
 		if (packages.size() > 0) {
 			builder.append("DynamicImportedPackages: ");
 			Iterator<ImportedPackage> iter = packages.iterator();
@@ -331,6 +407,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 		return builder.toString();
 	}
 
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#toJSON()
+	 */
 	public String toJSON() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("{\"trackedBundle\": {");
@@ -342,7 +423,7 @@ public class TrackedBundleImpl implements TrackedBundle {
 		builder.append("\", ");
 
 		// List all dynamic imports
-		List<ImportedPackage> packages = getDynamicImportedPackage();
+		List<ImportedPackage> packages = getDynamicImportedPackages();
 		if (packages.size() > 0) {
 			builder.append("\"dynamicImportedPackages\": [");
 			Iterator<ImportedPackage> iter = packages.iterator();
@@ -482,6 +563,46 @@ public class TrackedBundleImpl implements TrackedBundle {
 		}
 		builder.append("}}");
 		return builder.toString();
+	}
+
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getAllImportedPackages()
+	 */
+	public List<ImportedPackage> getAllImportedPackages() {
+		List<ImportedPackage> hostImports = getImportedPackages();
+		List<TrackedBundle> bundles = getAttachedFragmentBundles();
+		Iterator<TrackedBundle> iter = bundles.iterator();
+		while(iter.hasNext()) {
+			hostImports.addAll(iter.next().getImportedPackages());
+		}
+		return hostImports;
+	}
+
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getAllDynamicImportedPackages()
+	 */
+	public List<ImportedPackage> getAllDynamicImportedPackages() {
+		List<ImportedPackage> hostImports = getDynamicImportedPackages();
+		List<TrackedBundle> bundles = getAttachedFragmentBundles();
+		Iterator<TrackedBundle> iter = bundles.iterator();
+		while(iter.hasNext()) {
+			hostImports.addAll(iter.next().getDynamicImportedPackages());
+		}
+		return hostImports;
+	}
+
+	public List<ExportedPackage> getAllExportedPackages() {
+		List<ExportedPackage> hostExports = getExportedPackages();
+		List<TrackedBundle> bundles = getAttachedFragmentBundles();
+		Iterator<TrackedBundle> iter = bundles.iterator();
+		while(iter.hasNext()) {
+			hostExports.addAll(iter.next().getExportedPackages());
+		}
+		return hostExports;
 	}
 
 }

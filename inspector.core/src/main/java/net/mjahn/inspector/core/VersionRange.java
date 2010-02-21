@@ -320,7 +320,7 @@ public final class VersionRange {
     		return false;
     	}
     }
-
+    
     /**
 	 * Provides a JSON valid representation of this object.
 	 * @since 1.0
@@ -329,4 +329,21 @@ public final class VersionRange {
 	public String toJSON(){
 		return "{\"versionRange\":\""+toString()+"\"}";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((lowerBound == null) ? 0 : lowerBound.hashCode());
+		result = prime * result
+				+ ((singleVersion == null) ? 0 : singleVersion.hashCode());
+		result = prime * result
+				+ ((upperBound == null) ? 0 : upperBound.hashCode());
+		result = prime * result + ((vRange == null) ? 0 : vRange.hashCode());
+		result = prime * result + (withLB ? 1231 : 1237);
+		result = prime * result + (withUB ? 1231 : 1237);
+		return result;
+	}
+
 }

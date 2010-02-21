@@ -113,7 +113,7 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 	}
 	
 	void update(long id){
-		trackedBundles.remove(id);
+		trackedBundles.remove((int)id);
 		// add the new one (has the same id)
 		getTrackedBundle(id);
 	}
