@@ -38,7 +38,7 @@ public interface ExportedPackage {
 	 * @see net.mjahn.inspector.core.Attribute
 	 * @return the list of all defined attributes or an empty list if none are specified.
 	 */
-	public List<Attribute> getAttributes();
+	List<Attribute> getAttributes();
 	
 	/**
 	 * The directives as defined by this export statement.
@@ -47,15 +47,35 @@ public interface ExportedPackage {
 	 * @see net.mjahn.inspector.core.Directive
 	 * @return the list of all defined attributes or an empty list if none are specified.
 	 */
-	public List<Directive> getDirectives();
+	List<Directive> getDirectives();
+	
+	/**
+	 * Convenient method to get a specific directive by name.
+	 * 
+	 * @since 1.0
+	 * @param name the name of the directive
+	 * @return the directive with the given name or null
+	 */
+	Directive getDirective(String name);
 	
 	/**
 	 * Get the bundle defining this export statement.
 	 * 
 	 * @since 1.0
-	 * @return the bundle instance (loaded dynamically, so it can return null if uninstalled)
+	 * @return the bundle instance (loaded dynamically, so it can return null if un-installed)
 	 */
-	public Bundle getDefiningBundle();
+	Bundle getDefiningBundle();
+	
+	/**
+	 * Check if a given import request is satisfied by this export statement. It doesn't account
+	 * for the actual wiring, only the properties specified.
+	 * 
+	 * @since 1.0
+	 * @param impPackage the package that requires an export
+	 * @param evaluateMandatoryAttributes true if a match for mandatory attributes should be evaluated too.
+	 * @return true if this export satisfies the import request
+	 */
+	boolean statisfiesImport(ImportedPackage impPackage, boolean evaluateMandatoryAttributes);
 
 	/**
 	 * Provides a JSON valid representation of this object.

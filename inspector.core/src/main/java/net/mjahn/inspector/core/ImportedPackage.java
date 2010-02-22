@@ -42,6 +42,15 @@ public interface ImportedPackage {
 	public List<Attribute> getAttributes();
 	
 	/**
+	 * Convenient method to get a specific attribute by name.
+	 * 
+	 * @since 1.0
+	 * @param name the name of the attribute
+	 * @return the attribute with the given name or null
+	 */
+	public Attribute getAttribute(String name);
+	
+	/**
 	 * The directives as defined by this import statement.
 	 * 
 	 * @since 1.0
@@ -49,6 +58,15 @@ public interface ImportedPackage {
 	 * @return the list of all defined attributes or an empty list if none are specified.
 	 */
 	public List<Directive> getDirectives();
+	
+	/**
+	 * Convenient method to get a specific directive by name.
+	 * 
+	 * @since 1.0
+	 * @param name the name of the directive
+	 * @return the directive with the given name or null
+	 */
+	public Directive getDirective(String name);
 	
 	/**
 	 * Is this package marked as optional?

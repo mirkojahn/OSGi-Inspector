@@ -1,81 +1,27 @@
 package net.mjahn.inspector.core.impl;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import net.mjahn.inspector.core.Attribute;
 import net.mjahn.inspector.core.Directive;
 import net.mjahn.inspector.core.ExportedPackage;
+import net.mjahn.inspector.core.ImportedPackage;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
-public class ExportedPackageImpl implements ExportedPackage {
-	private final String packageName;
+public class ExportedPackageImpl extends AbstractPackage implements ExportedPackage {
 	private final Version version;
-	private final ArrayList<Directive> directives;
-	private final ArrayList<Attribute> attributes;
-	private final long bundleId;
 	
 	public ExportedPackageImpl(Object[][] packageString, long bundle){
-		bundleId = bundle;
-		// first position is the package name
-		packageName = (String) packageString[0][0];
-		
-		// second are directives
-		directives = Util.parseDirectives(packageString[1]);
-		
-		// third are attributes
-		attributes = Util.parseAttributes(packageString[2]);
+		super(packageString, bundle);
 		// set the default version for OSGi package export if not specified yet.
 		version = new Version(Util.getVersionString(attributes));
 	}
-
-	public List<Attribute> getAttributes() {
-		return attributes;
-	}
-
-	public List<Directive> getDirectives() {
-		return directives;
-	}
-
-	public String getPackageName() {
-		return packageName;
-	}
-
 	public Version getVersion() {
 		return version;
 	}
 
-	public Bundle getDefiningBundle() {
-		try{
-			return Activator.getContext().getBundle(bundleId);
-		} catch(Exception e){
-			return null;
-		}
-	}
-
-//	public String toString(){
-//		StringBuffer sb = new StringBuffer();
-//		sb.append(packageName);
-//		sb.append(getVersion());
-//		if(!directives.isEmpty()){
-//			Iterator<Directive> direcIter = directives.iterator();
-//			while(direcIter.hasNext()){
-//				sb.append(","+direcIter.next().toString());
-//			}
-//		}
-//		if(!attributes.isEmpty()){
-//			Iterator<Attribute> attrIter = attributes.iterator();
-//			while(attrIter.hasNext()){
-//				sb.append(","+attrIter.next().toString());
-//			}
-//		}
-//		sb.append(" by bundle ["+bundleId+"]");
-//		return sb.toString();
-//	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -167,4 +113,33 @@ public class ExportedPackageImpl implements ExportedPackage {
 			builder.append("}}");
 			return builder.toString();
 		}
+
+	public boolean statisfiesImport(ImportedPackage impPackage, boolean evaluateMandatoryAttributes) {
+		String impPackageName = impPackage.getPackageName();
+		if(impPackageName.endsWith("*")){
+			// match substring
+			if(impPackageName.length() != 1){
+				return packageName.startsWith(impPackageName.replace("*", ""));
+			}
+		} else {
+			return (impPackageName.equals(packageName));
+		}
+		// if we're still here, match required properties
+		if(evaluateMandatoryAttributes && attributes.size() > 0){
+			Iterator<Attribute> atts = attributes.iterator();
+			while(atts.hasNext()){
+				Attribute expAtt = atts.next();
+				if(expAtt.isMandatory()){
+					// we found a mandatory attribute!
+					Attribute impAtt = impPackage.getAttribute(expAtt.getName());
+					// either the import doesn't set this attribute or they do not match in value
+					if(impAtt == null || !impAtt.getValue().equals(expAtt.getValue())){
+						// not satisfied!
+						return false;
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
