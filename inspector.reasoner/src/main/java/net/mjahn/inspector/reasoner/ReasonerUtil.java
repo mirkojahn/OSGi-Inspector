@@ -3,11 +3,10 @@ package net.mjahn.inspector.reasoner;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import net.mjahn.inspector.core.TrackedBundle;
-
-import org.osgi.framework.BundleException;
 
 public class ReasonerUtil {
 	
@@ -59,5 +58,23 @@ public class ReasonerUtil {
 		}
 		dict.put(Reasoner.REASONER_IGNORE, ignore);
 		return dict;
+	}
+	
+	public static ReasonerResult getHighestPriorityResult(List<ReasonerResult> list){
+		ReasonerResult result = null;
+		Iterator<ReasonerResult> iter = list.iterator();
+		while(iter.hasNext()){
+			ReasonerResult temp = iter.next();
+			if(temp.getNestedReasonerResults()!=null){
+				ReasonerResult temp2 = getHighestPriorityResult(temp.getNestedReasonerResults());
+				if(temp2 != null && temp2.getErrorConfidence()>temp.getErrorConfidence()){
+					temp = temp2;
+				}
+			}
+			if( result == null || temp.getErrorConfidence()>result.getErrorConfidence()){
+				result = temp;
+			}
+		}
+		return result;
 	}
 }
