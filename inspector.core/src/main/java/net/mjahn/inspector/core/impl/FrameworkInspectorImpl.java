@@ -227,12 +227,17 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
     // TODO: think about a more lightweight fw Event
 	
 	synchronized void addFrameworkEvent(FrameworkEvent event){
+		if(fwErrorEvents.size()>allowedFwEvents){
+			fwErrorEvents.remove(0);
+		}
 		if(fwEvents.size()>allowedFwEvents){
-			FrameworkEvent ev = fwEvents.getFirst();
-			fwEvents.remove(0);
-			fwErrorEvents.remove(ev);
+			fwEvents.remove(0);	
 		}
 		fwEvents.add(event);
+		
+		if(event.getType() == FrameworkEvent.ERROR){
+			fwErrorEvents.add(event);
+		}
 	}
 	
 	public List<FrameworkEvent> getErrorFrameworkEvents() {
