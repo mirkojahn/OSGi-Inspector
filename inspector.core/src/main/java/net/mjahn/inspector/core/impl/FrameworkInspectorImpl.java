@@ -9,7 +9,7 @@ import java.util.List;
 import net.mjahn.inspector.core.ExportedPackage;
 import net.mjahn.inspector.core.FrameworkInspector;
 import net.mjahn.inspector.core.ImportedPackage;
-import net.mjahn.inspector.core.OSGiRuntime;
+import net.mjahn.inspector.core.OSGiRuntimeInfo;
 import net.mjahn.inspector.core.TrackedBundle;
 import static net.mjahn.inspector.core.Constants.INITIAL_BUNDLE_AMOUNT_PROPERTY;
 import static net.mjahn.inspector.core.Constants.INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE;
@@ -26,6 +26,7 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 	private LinkedList<FrameworkEvent> fwEvents;
 	private LinkedList<FrameworkEvent> fwErrorEvents;
 	private int allowedFwEvents;
+	private OSGiRuntimeInfoImpl osgiRuntimeInfo;
 	
 	public FrameworkInspectorImpl() {
 		String initialBundleCount = System.getProperty(INITIAL_BUNDLE_AMOUNT_PROPERTY);
@@ -43,7 +44,7 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 		} else {
 			trackedBundles = new ArrayList<TrackedBundleImpl>(INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE);
 		}
-		
+		osgiRuntimeInfo = new OSGiRuntimeInfoImpl();
 		String initialEventCount = System.getProperty(FRAMEWORK_EVENT_COUNT_PROPERTY);
 		if(initialEventCount != null && !initialEventCount.equals("")){
 			try{
@@ -103,9 +104,8 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 		return tb;
 	}
 
-	public OSGiRuntime getRuntime() {
-		// TODO Auto-generated method stub
-		return null;
+	public OSGiRuntimeInfo getRuntimeInfo() {
+		return osgiRuntimeInfo;
 	}
 	
 	void remove(long id){
@@ -227,6 +227,9 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
     // TODO: think about a more lightweight fw Event
 	
 	synchronized void addFrameworkEvent(FrameworkEvent event){
+		if(event.getType() == FrameworkEvent.STARTED){
+			osgiRuntimeInfo.fwStartedEventFired();
+		}
 		if(fwErrorEvents.size()>allowedFwEvents){
 			fwErrorEvents.remove(0);
 		}

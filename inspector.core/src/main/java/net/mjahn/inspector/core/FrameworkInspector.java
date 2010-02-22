@@ -49,7 +49,7 @@ public interface FrameworkInspector {
 	 * @since 1.0
 	 * @return analysis object of the OSGi Runtime.
 	 */
-	OSGiRuntime getRuntime();
+	OSGiRuntimeInfo getRuntimeInfo();
 	
 	/**
 	 * Obtain in one call all packages available in the runtime. This will cause to parse once all
