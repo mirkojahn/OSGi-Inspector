@@ -13,41 +13,15 @@
 				$("#tabs").tabs().find(".ui-tabs-nav").sortable({axis:'x'});
 				$('.selector').tabs({ spinner: 'Retrieving data...' });
 				
-				// Dialog			
-				$('#dialog').dialog({
-					autoOpen: false,
-					width: 600,
-					buttons: {
-						"Ok": function() { 
-							$(this).dialog("close"); 
-						}, 
-						"Cancel": function() { 
-							$(this).dialog("close"); 
-						} 
-					}
-				});
-				
-				// Dialog Link
-				$('#dialog_link').click(function(){
-					$('#dialog').dialog('open');
-					return false;
-				});
-				
 				//hover states on the static widgets
 				$('#dialog_link, ul#icons li').hover(
 					function() { $(this).addClass('ui-state-hover'); }, 
 					function() { $(this).removeClass('ui-state-hover'); }
 				);
-				
-				// custom behavior
-				$('#bundles').click( function(){
-						$('#dialog').dialog('open');
-							return false;
-				});
 			});
 		</script>
 		<style type="text/css">
-			body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 50px;}
+			body{ margin: 50px;font-size:small;}
 			.insHeaders { margin-top: 2em; }
 			#dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
 			#dialog_link span.ui-icon {margin: 0 5px 0 0;position: absolute;left: .2em;top: 50%;margin-top: -8px;}
@@ -58,60 +32,73 @@
 			input.text { margin-bottom:12px; width:95%; padding: .4em; }
 			fieldset { padding:0; border:0; margin-top:25px; }
 			div#bundles-contain {  width: 95%; margin: 20px 0; }
-			/*
-			h1 { font-size: 1.2em; margin: .6em 0; }
-			div#bundles-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
-			div#bundles-contain table td, div#bundles-contain table th { border: 1px solid #eee; padding: .3em 5px; text-align: left; }
-			*/
+			table {padding: 0.2em 0.2em;}
+			th {padding: 0.4em 0.2em 0.1em 0.2em; }
+			td {padding: 0.2em 0.2em 0.1em 0.3em; vertical-align: top;}
+			div.inspector-footer {text-align: center; padding: 1em; font-size:x-small; }
 			.ui-dialog .ui-state-highlight, .ui-dialog .ui-state-error { padding: .3em;  }
 		</style>	
 	</head>
 	<body>
-	<h1>OSGi Inspector (version 0.1.0.SNAPSHOT)</h1>	
+	<img src="inspector/res/inspector_mj_logo_no.png" />	
 		<!-- Tabs -->
 		<div id="tabs">
 			<ul>
 				<li><a href="#welcome">Welcome</a></li>
-				<li><a href="#container">OSGi Container</a></li>
-				<li><a href="inspector-bundles">Deployed Bundles</a></li>
-				<li><a href="#problems">Potential Problems</a></li>
-				<li><a href="#help">Help</a></li>
+				<li><a href="inspector-fw-errorevents">Runtime Problems</a></li>
+				<!--li><a href="inspector-bundles">Deployed Bundles</a></li-->
+				<li><a href="#about">About</a></li>
 			</ul>
 			<div id="welcome">
-				<h2>System overview</h2>
-				<p>
-					The current state of the UI is basically zero! There is NO dynamic content! Everything is fake!
-					However, this will get updated soon. In the meantime, checkout the tutorial or the api to get an
-					idea of what the inspector is all about!
-				</p>
-			</div>
-			<div id="container">
-				<h2>Nothing there yet!</h2>
-			</div>
-			<div id="help">
-				<h2>FAQ</h2>
-				<p>
-					<b>Question 1:</b> Some question:<br/>
-					nothing so far.
-				</p>
-			</div>
-			<div id="problems">
-				<h2 class="insHeaders">Highlight / Error</h2>
-				<div class="ui-widget">
-					<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
-						<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-						<strong>Hey!</strong> Sample ui-state-highlight style.</p>
-					</div>
-				</div>
-				<br/>
 				<div class="ui-widget">
 					<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"> 
 						<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-						<strong>Alert:</strong> Sample ui-state-error style.</p>
+						<strong>Alert:</strong> This project is still in proof of concept phase!<br/>The APIs may change while it progresses. The implementation certainly will!</p>
 					</div>
 				</div>
+				<h2>OSGi Runtime Details</h2>
+				<p>
+					##content## 
+				</p>
+			</div>
+			<div id="about">
+				<h2>Disclaimer</h2>
+				<p>
+					The {OSGi-}Inspector is supposed to be a community driven effort to cope with the nature of OSGi,
+					to foster OSGi adoption and building more robust, modular software. The project is by no means 
+					associated with the OSGi Alliance other than relying on their fabulous specification.
+				</p> 
+				<h2>FAQ</h2>
+				<p>
+					<b>Question 1:</b> Under which license is the inspector provided?<br/><br/>
+					The Inspector uses the Apache 2 License for most of its source code. Only the JQuery JavaScript
+					library remains in their own MIT license. If you're having problems with the MIT license, you
+					could just create you're own UI based on the core components the same way the Inspector UI does it.
+				</p>
+				<p>
+					<b>Question 2:</b> Where can I find the source code?<br/><br/>
+					Just got to the github repository and download it if needed: <a href="http://github.com/mirkojahn/OSGi-Inspector" title="external link: OSGi-Inspector Source" target="_blank">http://github.com/mirkojahn/OSGi-Inspector</a>
+				</p>
+				<p>
+					<b>Question 3:</b> What about documentation? Is there any tutorial?<br/><br/>
+					To be true, the documentation is pretty thin right now, but work in progress. Check out the wiki
+					to get the most recent documentation and tutorials:<br/>
+					<a href="http://wiki.github.com/mirkojahn/OSGi-Inspector/" title="external link: OSGi-Inspector wiki">http://wiki.github.com/mirkojahn/OSGi-Inspector/</a><br />
+					The public API however is documented with JavaDoc and can simply be generated for each module on a as 
+					need bases from the sources. Just get the sources and call "mvn site" for each module you're interested in.
+				</p>
+				<p>
+					<b>Question 4:</b> I'd like to help, how could I participate?<br/><br/>
+					Simple. Sign-up at <a href="https://github.com/" target="_blank" title="external link: GitHub Home">https://github.com/</a> 
+					and connect to the developers or branch to do your own thing and we try to merge interesting enhancement back in.
+				</p>
 			</div>
 			
+		</div>
+		<div class="inspector-footer">
+			Inspector UI, Version: 0.1.0.SNAPSHOT || Website: <a href="http://wiki.github.com/mirkojahn/OSGi-Inspector/" title="external link: OSGi-Inspector wiki">http://wiki.github.com/mirkojahn/OSGi-Inspector/</a><br />
+			The source code is under Apache 2.0 License, the JQuery part remains under the MIT License<br />
+			OSGi is a trademark of the <a href="http://www.osgi.org" title="external link: OSGi Alliance Website" target="_blank">OSGi Alliance</a> and not related to this project other than using their API!
 		</div>
 	</body>
 </html>

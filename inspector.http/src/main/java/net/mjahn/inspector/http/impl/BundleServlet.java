@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,12 +15,6 @@ public class BundleServlet extends HttpServlet {
 	 * Serial ID
 	 */
 	private static final long serialVersionUID = -7653896054054421890L;
-	
-	String	name = "inspector-bundles";
-	
-	public void init( ServletConfig config ) { this.name = (String)
-		config.getInitParameter( "name" );
-	}
 	
 	public void doGet( HttpServletRequest req, HttpServletResponse rsp) throws IOException { 
 		rsp.setContentType( "text/html" ); 

@@ -1,0 +1,27 @@
+				<div id="fw-error-events" class="ui-widget">
+					<table id="error-events" class="ui-widget ui-widget-content">
+						<thead>
+							<tr class="ui-widget-header">
+								<th>ID</th>
+								<th>Type</th>
+								<th>Bundle-SymbolicName</th>
+								<th>Problem analysis</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>0</td>
+								<td>Activation Error</td>
+								<td>system.bundle</td>
+								<td>bli bla blub</td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>Resolving Error</td>
+								<td>net.mjahn.test.fragment</td>
+								<td>bli bla blub</td>				
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+		</div>

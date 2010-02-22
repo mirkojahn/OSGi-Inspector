@@ -1,20 +1,11 @@
 package net.mjahn.inspector.http.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Hashtable;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import net.mjahn.inspector.core.FrameworkInspector;
+import net.mjahn.inspector.reasoner.Reasoner;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -27,8 +18,9 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 
-	private static FrameworkInspector fwInspector = null;
 	private ServiceTracker httpTracker;
+	private static ServiceTracker fwTracker;
+	private static ServiceTracker rsTracker;
 	private String serviceName = "/inspector";
 	private static BundleContext ctx = null;
 
@@ -42,8 +34,10 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 		httpTracker = new ServiceTracker(context, HttpService.class.getName(),
 				this);
 		httpTracker.open();
-		// fwInspector = new FrameworkInspector();
-
+		fwTracker = new ServiceTracker(context, FrameworkInspector.class.getName(), null);
+		fwTracker.open();
+		rsTracker = new ServiceTracker(context, Reasoner.class.getName(), null);
+		rsTracker.open();
 	}
 
 	/**
@@ -62,7 +56,11 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	}
 
 	public static FrameworkInspector getFrameworkInspector() {
-		return fwInspector;
+		return (FrameworkInspector)fwTracker.getService();
+	}
+	
+	public static Reasoner getReasoner() {
+		return (Reasoner)rsTracker.getService();
 	}
 	
 	public static BundleContext getBundleContext(){
@@ -72,64 +70,17 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	public Object addingService(ServiceReference reference) {
 		Hashtable<String, String> initparams = new Hashtable<String, String>();
 		initparams.put("name", serviceName);
-		javax.servlet.Servlet myServlet = new HttpServlet() {
-			private static final long serialVersionUID = -7398914113448648745L;
-			@SuppressWarnings("unused")
-			String name = "/inspector";
-			String content = null;
-
-			public void init(ServletConfig config) {
-				this.name = (String) config.getInitParameter("name");
-			}
-
-			public void doGet(HttpServletRequest req, HttpServletResponse rsp)
-					throws IOException {
-				rsp.setContentType("text/html");
-				rsp.setCharacterEncoding( "UTF-8" );
-				if(req.getRequestURI().startsWith("/inspector/")){
-					// redirect
-					URL indexUrl = ctx.getBundle().getEntry("/redirect.html");
-					URLConnection connection = indexUrl.openConnection();
-					InputStream ins = connection.getInputStream();
-					OutputStream out = rsp.getOutputStream();
-					byte[] buf = new byte[2048];
-					int rd;
-					while ((rd = ins.read(buf)) >= 0) {
-						out.write(buf, 0, rd);
-					}
-					return;
-				}
-				synchronized(this){
-					if(content == null){
-						URL indexUrl = ctx.getBundle().getEntry("/index.html");
-						URLConnection connection = indexUrl.openConnection();
-						InputStream ins = connection.getInputStream();
-						OutputStream out = new ByteArrayOutputStream();//rsp.getOutputStream();
-						byte[] buf = new byte[2048];
-						int rd;
-						while ((rd = ins.read(buf)) >= 0) {
-							out.write(buf, 0, rd);
-						}
-						content = out.toString();
-						out.close();
-					}
-				}
-				String output = content;
-//				if(req.getRequestURI().startsWith("/inspector/")){
-//					// make the resources absolute
-//					output = output.replaceAll("inspector\\/res\\/", "\\/inspector\\/res\\/");
-//				}
-				rsp.getWriter().print(output);
-			}
-		};
 		HttpService http = null;
 		try {
 			http = ((HttpService) ctx.getService(reference));
 			HttpContext context =http.createDefaultHttpContext();
-			http.registerServlet(serviceName, myServlet, initparams, context);
+			http.registerServlet(serviceName, new OSGiRuntimeServlet(), initparams, context);
 			Hashtable<String, String> initparams2 = new Hashtable<String, String>();
 			initparams2.put("name", "/inspector-bundles");
+			Hashtable<String, String> initparams3 = new Hashtable<String, String>();
+			initparams3.put("name", "/inspector-fw-errorevents");
 			http.registerServlet("/inspector-bundles", new BundleServlet(), initparams2,context);
+			http.registerServlet("/inspector-fw-errorevents", new FrameworkEventErrorServlet(), initparams2,context);
 			http.registerResources("/inspector/res", "/inspector/res", context);
 		} catch (ServletException e) {
 			e.printStackTrace();
