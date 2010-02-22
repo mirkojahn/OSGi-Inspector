@@ -13,7 +13,7 @@
 --vmo=-Dorg.osgi.service.http.port=8080 \
 -Dorg.osgi.service.http.port.secure=8443 \
 -Dfelix.fileinstall.poll=4000 \
--Dfelix.fileinstall.dir=../../hotdeploy
+-Dfelix.fileinstall.dir=../../plugins
 
 # set debug as log level
 #--log=debug
@@ -27,6 +27,7 @@
 # the inspector libraries, started first
 ../inspector
 ../inspector-util
+../testbundles
 ../inspector-ui
 
 # After this line, do what ever you like. 
