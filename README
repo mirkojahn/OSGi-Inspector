@@ -1,7 +1,17 @@
 The OSGi-Inspector project
 
-Goals: 
+Features since 0.1.0:
+- discovery of unsatisfied service requests
+- tracking of pending service requests
+- capabilities of the OSGi runtime (just the core for now)
+- assembly for a simple klick and got test drive (based on Pax_Runner)
+- tutorial to show the very core idea (no ui there yet)
+- UI to visualize parts of the tracked data (http://localhost:8080/inspector)
+- reasoner API to allow for plug-able reasoning about runtime problems
+- simple reasoner for ClassNotFoundException
+- Framework Error Event reasoner (partially implemented)
 
+General Goals: 
 - offer convenient methods to analyze internals of the OSGi runtime like:
 	- unsatisfied and pending service requests
 	- mismatching version constraints on packages
@@ -18,7 +28,3 @@ Internal Requirements:
 - OSGi R4 runtime (best results with R4.2)
 - no other dependencies on 3rd party libraries or special OSGi framework implementations
 - started before any other bundle in order to track service service requests
-
-Features since 0.1.0:
-- discovery of unsatisfied service requests
-- tracking of pending service requests
