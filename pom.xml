@@ -58,8 +58,7 @@
     <module>inspector.tutorial1</module>
     <module>inspector.tutorial1.web</module>
     <module>inspector.http</module>
-    <!-- module>inspector.http</module>
-    <module>inspector.spring</module>
+    <!-- <module>inspector.spring</module>
     <module>stats</module>
     <module>lifecycle</module -->
     <module>inspector.assembly</module>
@@ -190,6 +189,7 @@
       <plugin>
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>maven-paxexam-plugin</artifactId>
+        <version>1.2.0</version>
         <executions>
           <execution>
             <id>generate-config</id>

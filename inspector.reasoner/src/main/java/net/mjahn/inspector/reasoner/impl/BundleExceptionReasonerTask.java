@@ -70,11 +70,32 @@ public class BundleExceptionReasonerTask implements ReasonerTask {
 					return new DefaultReasonerResult(0.1f, "We have an ActivatorError BundleException without an attached Exception. No clue what that means.", ERROR_PREFIX + "02", null);
 				}
 			} else if(type == BundleException.RESOLVE_ERROR) {
-				
+				// first, check if it is a fragment
+				// yes --> 
+				//		is there a host to attach to? (first the bundle then, then the attachment rules, then conflicting manifest headers) --> error
+				// no -->
+				// 		is there a missing import?
+				//		is there a problem with the attributes/directives of the import?
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType RESOLVE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+			} else if(type == BundleException.DUPLICATE_BUNDLE_ERROR) {
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType DUPLICATE_BUNDLE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+			} else if(type == BundleException.INVALID_OPERATION) {
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType INVALID_OPERATION ("+type+")", ERROR_PREFIX + "99", null);
+			} else if(type == BundleException.MANIFEST_ERROR) {
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType MANIFEST_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+			} else if(type == BundleException.SECURITY_ERROR) {
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType SECURITY_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+			} else if(type == BundleException.START_TRANSIENT_ERROR) {
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType START_TRANSIENT_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+			} else if(type == BundleException.STATECHANGE_ERROR) {
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType STATECHANGE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+			} else if(type == BundleException.UNSUPPORTED_OPERATION) {
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType UNSUPPORTED_OPERATION ("+type+")", ERROR_PREFIX + "99", null);
+			} else if(type == BundleException.NATIVECODE_ERROR) {
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType NATIVECODE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
 			} else {
-				System.out.println("Not (yet) analyzed BundleExceptionType: "+type);
+				return new DefaultReasonerResult(0.1f,"The given error is not known by the reasoner: BundleExceptionType "+type, ERROR_PREFIX + "99", null);
 			}
-			// FIXME: write code to handle all other types of bundle exceptions as well!
 		}
 		return new DefaultReasonerResult();
 	}

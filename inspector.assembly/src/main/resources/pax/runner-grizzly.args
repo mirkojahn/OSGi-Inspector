@@ -1,0 +1,56 @@
+# runner.args
+#############################################
+#                                           #
+#         Configuration first               #
+#                                           #
+#############################################
+
+# use Eclipse as runtime (any other is possible as well
+--p=e 
+--version=3.5.1 
+
+# properties for http service ports
+--vmo=-Dorg.osgi.service.http.port=8080 \
+-Dorg.osgi.service.http.port.secure=8443 \
+-Dfelix.fileinstall.poll=4000 \
+-Dfelix.fileinstall.dir=../../plugins
+
+# set debug as log level
+#--log=debug
+
+#############################################
+#                                           #
+#         Bundle setup second               #
+#                                           #
+#############################################
+
+# the inspector libraries, started first
+../inspector
+#../inspector-util
+../testbundles
+../inspector-ui
+mvn:http://download.java.net/maven/2/!com.sun.grizzly.osgi/grizzly-httpservice-bundle/1.9.9-SNAPSHOT
+#mvn:http://download.java.net/maven/2/!com.sun.grizzly.osgi/grizzly-httpservice/1.9.9-SNAPSHOT
+
+# After this line, do what ever you like. 
+# Here are some examples usually useful.
+
+# the profiles to provision the container with
+#--profiles=prefs
+
+# wrap these bundles and deploy them
+#wrap:mvn:javax.mail/mail/1.4$Export-Package=*;version="1.4.0"
+#wrap:mvn:javax.jms/jms/1.1$Export-Package=*;version="1.1.0"
+#wrap:mvn:javax.servlet/jsp-api/2.0$Export-Package=*;version="2.0.0"
+#wrap:mvn:javax.servlet/jstl/1.2$Export-Package=*;version="1.2.0"
+
+# provide a simple drop-in folder for hotdeployment
+mvn:org.apache.felix/org.apache.felix.fileinstall/2.0.8
+
+# provide some bundle to showcase the tutorial
+#mvn:org.apache.felix/javax.servlet/1.0.0
+mvn:org.osgi/org.osgi.compendium/4.2.0
+# you could also wrap a regular jar as an OSGi bundle
+#wrap:mvn:javax.servlet/servlet-api/2.4$Export-Package=*;version="2.4.0"@nostart
+#mvn:org.apache.felix/org.apache.felix.http.jetty/1.0.1
+
