@@ -93,7 +93,7 @@ public class BundleExceptionReasonerTask implements ReasonerTask {
 				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType UNSUPPORTED_OPERATION ("+type+")", ERROR_PREFIX + "99", null);
 			} else if(type == BundleException.NATIVECODE_ERROR) {
 				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType NATIVECODE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
-			} else {
+			} else { 
 				return new DefaultReasonerResult(0.1f,"The given error is not known by the reasoner: BundleExceptionType "+type, ERROR_PREFIX + "99", null);
 			}
 		}
