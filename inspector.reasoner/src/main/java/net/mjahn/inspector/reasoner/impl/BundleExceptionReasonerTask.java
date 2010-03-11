@@ -14,6 +14,7 @@ import net.mjahn.inspector.reasoner.ReasonerTaskCapability;
 import net.mjahn.inspector.reasoner.ReasonerUtil;
 
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 
 public class BundleExceptionReasonerTask implements ReasonerTask {
 
@@ -78,21 +79,29 @@ public class BundleExceptionReasonerTask implements ReasonerTask {
 				//		is there a problem with the attributes/directives of the import?
 				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType RESOLVE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
 			} else if(type == BundleException.DUPLICATE_BUNDLE_ERROR) {
-				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType DUPLICATE_BUNDLE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+				// there is just one reason why this could happen
+				return new DefaultReasonerResult(1f,"The install or update operation failed because another already installed bundle has the same symbolic name and version. "+tb.getBundle().getSymbolicName()+" "+tb.getBundle().getVersion(), ERROR_PREFIX + "10", null);
 			} else if(type == BundleException.INVALID_OPERATION) {
-				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType INVALID_OPERATION ("+type+")", ERROR_PREFIX + "99", null);
+				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType INVALID_OPERATION ("+type+") "+be.getMessage(), ERROR_PREFIX + "99", null);
 			} else if(type == BundleException.MANIFEST_ERROR) {
 				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType MANIFEST_ERROR ("+type+")", ERROR_PREFIX + "99", null);
 			} else if(type == BundleException.SECURITY_ERROR) {
-				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType SECURITY_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+				return new DefaultReasonerResult(1f,"An operation failed due to insufficient permissions. "+be.getMessage(), ERROR_PREFIX + "13", null);
 			} else if(type == BundleException.START_TRANSIENT_ERROR) {
-				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType START_TRANSIENT_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+				return new DefaultReasonerResult(1f,"The start transient operation failed because the start level of the bundle is greater than the current framework start level. "+be.getMessage(), ERROR_PREFIX + "14", null);
 			} else if(type == BundleException.STATECHANGE_ERROR) {
 				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType STATECHANGE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
 			} else if(type == BundleException.UNSUPPORTED_OPERATION) {
 				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType UNSUPPORTED_OPERATION ("+type+")", ERROR_PREFIX + "99", null);
 			} else if(type == BundleException.NATIVECODE_ERROR) {
-				return new DefaultReasonerResult(0.1f,"The given error is not yet handled by the reasoner: BundleExceptionType NATIVECODE_ERROR ("+type+")", ERROR_PREFIX + "99", null);
+				String hd = "";
+				try {
+					Dictionary headerDict = tb.getBundle().getHeaders();
+					hd = (String)headerDict.get(Constants.BUNDLE_NATIVECODE);
+				} catch (Exception e){
+					hd = "Couldn't resolve the native header.";
+				}
+				return new DefaultReasonerResult(1f,"The bundle could not be resolved due to an error with the Bundle-Native-Code header: "+hd, ERROR_PREFIX + "99", null);
 			} else { 
 				return new DefaultReasonerResult(0.1f,"The given error is not known by the reasoner: BundleExceptionType "+type, ERROR_PREFIX + "99", null);
 			}
