@@ -484,6 +484,30 @@
     </repository>
   </repositories>
 
+  <pluginRepositories>
+    <pluginRepository>
+        <id>nexus-oss-plugins-snapshots</id>
+        <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>nexus-oss-plugins-staging</id>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      <releases>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+  
   <scm>
     <connection>scm:git:ssh://github.com/mirkojahn/OSGi-Inspector.git</connection>
     <developerConnection>scm:git:ssh://git@github.com:mirkojahn/OSGi-Inspector.git</developerConnection>
