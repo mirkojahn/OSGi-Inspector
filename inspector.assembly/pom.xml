@@ -12,13 +12,18 @@
     <description>Inspector Distribution Assembly</description>
     <version>0.1.0.SNAPSHOT</version>
     <packaging>pom</packaging>
-
     <name>net.mjahn.inspector.assembly (Assembly)</name>
+
+    <properties>
+        <mem.agent.version>${version}</mem.agent.version>
+    </properties>
 
     <build>
       <plugins>
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.2-beta-5</version>
+          <!--  NOTE 2.1 fails for nar plugin-->
           <executions>
             <execution>
               <id>create-expanded-directory</id>
@@ -29,6 +34,9 @@
               <configuration>
                 <descriptors>
                   <descriptor>src/assembly/descriptor.xml</descriptor>
+                  <!--descriptor>src/assembly/x86-Windows-msvc.xml</descriptor-->
+                  <!--descriptor>src/assembly/i386-MacOSX-g++.xml</descriptor-->
+                  <!--descriptor>src/assembly/i386-Linux-g++.xml</descriptor-->
                 </descriptors>
                 <includeScope>compile</includeScope>
                 <stripVersion>true</stripVersion>
@@ -49,6 +57,35 @@
               </configuration>
             </execution>
           </executions>
+        </plugin>
+        
+        <plugin>
+        <artifactId>maven-nar-plugin</artifactId>
+        <groupId>net.mjahn</groupId>
+        <version>2.1-SNAPSHOT</version>
+          <configuration>
+            <classifiers>
+              <!--classifier>x86-Windows-msvc</classifier-->
+              <classifier>i386-MacOSX-g++</classifier>
+              <!--classifier>i386-Linux-g++</classifier-->
+            </classifiers>
+            <libraries>
+              <library>
+                <type>executable</type>
+                <run>true</run>
+              </library>
+            </libraries>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>nar-download</goal>
+                <goal>nar-unpack</goal>
+                <!--goal>nar-assembly</goal-->
+              </goals>
+            </execution>
+          </executions>
+          <extensions>true</extensions>
         </plugin>
       </plugins>
     </build>
@@ -90,6 +127,28 @@
             <artifactId>org.apache.felix.fileinstall</artifactId>
             <version>2.0.8</version>
         </dependency>
+        <dependency>
+          <groupId>net.mjahn</groupId>
+          <artifactId>mem.agent</artifactId>
+          <version>0.1.0.SNAPSHOT</version>
+          <type>nar</type>
+        </dependency>
     </dependencies>
 
+  <pluginRepositories>
+    <pluginRepository>
+    <!-- Used to fetch Native Archive Plugin -->
+      <id>nar-plugin</id>
+      <name>Maven NAR Plug-in Repository</name>
+      <url>http://duns.github.com/maven-snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+  
 </project>

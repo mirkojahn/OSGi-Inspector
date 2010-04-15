@@ -28,8 +28,8 @@
 ../inspector
 ../testbundles
 ../inspector-ui
-mvn:http://download.java.net/maven/2/!com.sun.grizzly.osgi/grizzly-httpservice-bundle/1.9.9-SNAPSHOT
-#mvn:http://download.java.net/maven/2/!com.sun.grizzly.osgi/grizzly-httpservice/1.9.9-SNAPSHOT
+mvn:http://download.java.net/maven/2/!com.sun.grizzly.osgi/grizzly-httpservice-bundle/1.9.17
+#mvn:http://download.java.net/maven/2/!com.sun.grizzly.osgi/grizzly-httpservice/1.9.17
 
 # After this line, do what ever you like. 
 # Here are some examples usually useful.

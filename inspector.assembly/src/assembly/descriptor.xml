@@ -61,11 +61,22 @@
   <fileSets>
 		<fileSet>
 			<directory>src/main/resources</directory>
-			<filtered>false</filtered>
+			<filtered>true</filtered>
 			<outputDirectory>/</outputDirectory>
 			<includes>
 				<include>**</include>
 			</includes>
 		</fileSet>
+                <fileSet>
+                  <directory>target/nar/mem.agent-0.1.0.SNAPSHOT-i386-MacOSX-gpp-jni/lib/i386-MacOSX-gpp/jni</directory>
+                  <outputDirectory>/libs</outputDirectory>
+                  <filtered>true</filtered>
+                  <includes>
+                    <include>*</include>
+                  </includes>
+                  <excludes>
+                    <exclude>*.xml</exclude>
+                  </excludes>
+                </fileSet>
   </fileSets>
 </assembly>

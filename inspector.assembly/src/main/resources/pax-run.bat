@@ -14,9 +14,12 @@ echo starting Tutorial 1
 CALL java %JAVA_OPTS% -cp ".;%_SCRIPTS_%;%_SCRIPTS_%\pax\pax-runner.jar" org.ops4j.pax.runner.Run --args="file:tutorial1.args" %2 %3 %4 %5 %6 %7 %8 %9 
 goto:eof
 
-:tut2
-echo starting Tutorial 2
-CALL java %JAVA_OPTS% -cp ".;%_SCRIPTS_%;%_SCRIPTS_%\pax\pax-runner.jar" org.ops4j.pax.runner.Run --args="file:tutorial1.args" %2 %3 %4 %5 %6 %7 %8 %9 
+:mem
+echo Starting Memory Profiling Inspector Runtime
+set LOCALPATH=%~dp0
+set LOCALPATH=%LOCALPATH%/libs
+set DYLD_LIBRARY_PATH=%LOCALPATH%
+CALL java %JAVA_OPTS% -agentlib:mem.agent-${mem.agent.version} -Dmem.agent.version=${mem.agent.version} -cp ".;%_SCRIPTS_%;%_SCRIPTS_%\pax\pax-runner.jar" org.ops4j.pax.runner.Run --args="file:tutorial1.args" %2 %3 %4 %5 %6 %7 %8 %9 
 goto:eof
 
 :default
