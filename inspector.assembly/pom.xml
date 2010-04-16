@@ -20,6 +20,89 @@
 
     <build>
       <plugins>
+        <!-- as long as the plug-in doesn't work properly, use the ant task -->
+        <!--plugin>
+        <artifactId>maven-nar-plugin</artifactId>
+        <groupId>net.mjahn</groupId>
+        <version>2.1-SNAPSHOT</version>
+          <configuration>
+            <classifiers>
+              <classifier>i386-MacOSX-g++</classifier>
+            </classifiers>
+            <libraries>
+              <library>
+                <type>executable</type>
+                <run>true</run>
+              </library>
+            </libraries>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>nar-download</goal>
+                <goal>nar-unpack</goal>
+              </goals>
+            </execution>
+          </executions>
+          <extensions>true</extensions>
+        </plugin-->
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>download-unpack</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>net.mjahn</groupId>
+                  <artifactId>mem.agent</artifactId>
+                  <version>0.1.0.SNAPSHOT</version>
+                  <type>nar</type>
+                  <classifier>i386-MacOSX-gpp-jni</classifier>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>target/nar</outputDirectory>
+                  <excludes>*.xml</excludes>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <configuration>
+              <tasks>
+                <unzip dest="${project.build.directory}/nar/unzipped">
+                    <patternset>
+                        <include name="**/*"/>
+                        <exclude name="**/*.xml"/>
+                    </patternset>
+                    <fileset dir=".">
+                        <include name="**/*.nar"/>
+                    </fileset>
+                    <mapper type="flatten"/>
+                </unzip>
+                <delete includeemptydirs="true">
+                  <fileset dir="${project.build.directory}/nar/unzipped/" includes="*" excludes="*.*"/>
+                </delete>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>2.2-beta-5</version>
@@ -27,7 +110,7 @@
           <executions>
             <execution>
               <id>create-expanded-directory</id>
-              <phase>process-resources</phase>
+              <phase>prepare-package</phase>
               <goals>
                 <goal>directory-single</goal>
               </goals>
@@ -57,35 +140,6 @@
               </configuration>
             </execution>
           </executions>
-        </plugin>
-        
-        <plugin>
-        <artifactId>maven-nar-plugin</artifactId>
-        <groupId>net.mjahn</groupId>
-        <version>2.1-SNAPSHOT</version>
-          <configuration>
-            <classifiers>
-              <!--classifier>x86-Windows-msvc</classifier-->
-              <classifier>i386-MacOSX-g++</classifier>
-              <!--classifier>i386-Linux-g++</classifier-->
-            </classifiers>
-            <libraries>
-              <library>
-                <type>executable</type>
-                <run>true</run>
-              </library>
-            </libraries>
-          </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>nar-download</goal>
-                <goal>nar-unpack</goal>
-                <!--goal>nar-assembly</goal-->
-              </goals>
-            </execution>
-          </executions>
-          <extensions>true</extensions>
         </plugin>
       </plugins>
     </build>
@@ -133,6 +187,13 @@
           <version>0.1.0.SNAPSHOT</version>
           <type>nar</type>
         </dependency>
+        <dependency>
+          <groupId>net.mjahn</groupId>
+          <artifactId>mem.agent</artifactId>
+          <version>0.1.0.SNAPSHOT</version>
+          <classifier>i386-MacOSX-gpp-jni</classifier>
+          <type>nar</type>
+        </dependency>
     </dependencies>
 
   <pluginRepositories>
@@ -140,7 +201,7 @@
     <!-- Used to fetch Native Archive Plugin -->
       <id>nar-plugin</id>
       <name>Maven NAR Plug-in Repository</name>
-      <url>http://duns.github.com/maven-snapshots</url>
+      <url>http://oss.sonatype.org/content/groups/staging/</url>
       <releases>
         <enabled>false</enabled>
       </releases>
