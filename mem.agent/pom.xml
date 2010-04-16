@@ -33,8 +33,8 @@
     <plugins>
       <plugin>
         <artifactId>maven-nar-plugin</artifactId>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>2.1.1-SNAPSHOT</version>
+        <groupId>net.mjahn</groupId>
+        <version>2.1-SNAPSHOT</version>
         <extensions>true</extensions>
         <configuration>
           <cpp>
@@ -52,18 +52,71 @@
       </plugin>
     </plugins>
   </build>
-  <pluginRepositories>
-    <pluginRepository>
-    <!-- Used to fetch Native Archive Plugin -->
-      <id>nar-plugin</id>
-      <name>Maven NAR Plug-in Repository</name>
-      <url>http://duns.github.com/maven-snapshots</url>
+
+  <distributionManagement>
+    <downloadUrl>http://github.com/mirkojahn/OSGi-Inspector/downloads</downloadUrl>
+    <site>
+      <id>inspector-web</id>
+      <name>OSGi-Inspector</name>
+      <url>http://github.com/mirkojahn/OSGi-Inspector</url>
+    </site>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <name>Nexus Release Repository</name>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>nexus-oss-snapshots</id>
+      <name>Nexus OSS Snapshot Repository</name>
+      <url>http://oss.sonatype.org/content/groups/staging/</url>
       <releases>
         <enabled>false</enabled>
       </releases>
       <snapshots>
         <updatePolicy>daily</updatePolicy>
         <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>nexus-oss-staging</id>
+      <name>Nexus OSS Staging Repository</name>
+      <url>http://oss.sonatype.org/content/groups/staging/</url>
+      <releases>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+        <id>nexus-oss-plugins-snapshots</id>
+        <url>http://oss.sonatype.org/content/groups/staging/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>nexus-oss-plugins-staging</id>
+      <url>http://oss.sonatype.org/content/groups/staging/</url>
+      <releases>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
