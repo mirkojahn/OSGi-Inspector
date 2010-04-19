@@ -37,6 +37,10 @@
         <version>2.1-SNAPSHOT</version>
         <extensions>true</extensions>
         <configuration>
+          <gnuUseOnWindows>true</gnuUseOnWindows>
+          <linker>
+              <name>g++</name>
+          </linker>
           <cpp>
             <debug>true</debug>
             <exceptions>false</exceptions>
