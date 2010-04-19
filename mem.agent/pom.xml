@@ -28,35 +28,84 @@
     </developer>
   </developers>
 
+  <profiles>
+    <profile>
+      <id>Mac OS X compile rule set</id>
+      <activation>
+        <os>
+          <name>Mac OS X</name>
+          <arch>i386</arch>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-nar-plugin</artifactId>
+            <groupId>net.mjahn</groupId>
+            <version>2.1-SNAPSHOT</version>
+            <extensions>true</extensions>
+            <configuration>
+              <gnuUseOnWindows>true</gnuUseOnWindows>
+              <linker>
+                <name>g++</name>
+              </linker>
+              <cpp>
+                <debug>true</debug>
+                <exceptions>false</exceptions>
+              </cpp>
+              <libraries>
+                <library>
+                  <type>jni</type>
+                  <narSystemPackage>net.mjahn.agent.inspector</narSystemPackage>
+                  <linkCPP>false</linkCPP>
+                </library>
+              </libraries>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>WindowsXP</id>
+      <activation>
+        <os>
+          <name>Windows XP</name>
+          <arch>i386</arch>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-nar-plugin</artifactId>
+            <groupId>net.mjahn</groupId>
+            <version>2.1-SNAPSHOT</version>
+            <extensions>true</extensions>
+            <configuration>
+              <gnuUseOnWindows>true</gnuUseOnWindows>
+              <linker>
+                <name>g++</name>
+                <options>
+                  <option>-Wl,--add-stdcall-alias</option>
+                </options>
+              </linker>
+              <cpp>
+                <debug>true</debug>
+                <exceptions>false</exceptions>
+              </cpp>
+              <libraries>
+                <library>
+                  <type>jni</type>
+                  <narSystemPackage>net.mjahn.agent.inspector</narSystemPackage>
+                  <linkCPP>false</linkCPP>
+                </library>
+              </libraries>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
   <!-- see for usage: http://duns.github.com/maven-nar-plugin/usage.html -->
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-nar-plugin</artifactId>
-        <groupId>net.mjahn</groupId>
-        <version>2.1-SNAPSHOT</version>
-        <extensions>true</extensions>
-        <configuration>
-          <gnuUseOnWindows>true</gnuUseOnWindows>
-          <linker>
-              <name>g++</name>
-          </linker>
-          <cpp>
-            <debug>true</debug>
-            <exceptions>false</exceptions>
-          </cpp>
-          <libraries>
-            <library>
-              <type>jni</type>
-              <narSystemPackage>net.mjahn.agent.inspector</narSystemPackage>
-              <linkCPP>false</linkCPP>
-            </library>
-          </libraries>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
   <distributionManagement>
     <downloadUrl>http://github.com/mirkojahn/OSGi-Inspector/downloads</downloadUrl>
     <site>
@@ -103,8 +152,8 @@
   </repositories>
   <pluginRepositories>
     <pluginRepository>
-        <id>nexus-oss-plugins-snapshots</id>
-        <url>http://oss.sonatype.org/content/groups/staging/</url>
+      <id>nexus-oss-plugins-snapshots</id>
+      <url>http://oss.sonatype.org/content/groups/staging/</url>
       <releases>
         <enabled>false</enabled>
       </releases>
