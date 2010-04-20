@@ -15,38 +15,11 @@
     <name>net.mjahn.inspector.assembly (Assembly)</name>
 
     <properties>
-        <mem.agent.version>${version}</mem.agent.version>
+        <mem.agent.version>0.1.0-SNAPSHOT</mem.agent.version>
     </properties>
 
     <build>
       <plugins>
-        <!-- as long as the plug-in doesn't work properly, use the ant task -->
-        <!--plugin>
-        <artifactId>maven-nar-plugin</artifactId>
-        <groupId>net.mjahn</groupId>
-        <version>2.1-SNAPSHOT</version>
-          <configuration>
-            <classifiers>
-              <classifier>i386-MacOSX-g++</classifier>
-            </classifiers>
-            <libraries>
-              <library>
-                <type>executable</type>
-                <run>true</run>
-              </library>
-            </libraries>
-          </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>nar-download</goal>
-                <goal>nar-unpack</goal>
-              </goals>
-            </execution>
-          </executions>
-          <extensions>true</extensions>
-        </plugin-->
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -62,7 +35,17 @@
                 <artifactItem>
                   <groupId>net.mjahn</groupId>
                   <artifactId>mem.agent</artifactId>
-                  <version>0.1.0.SNAPSHOT</version>
+                  <version>0.1.0-SNAPSHOT</version>
+                  <type>nar</type>
+                  <classifier>x86-Windows-gpp-jni</classifier>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>target/nar</outputDirectory>
+                  <excludes>*.xml</excludes>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>net.mjahn</groupId>
+                  <artifactId>mem.agent</artifactId>
+                  <version>0.1.0-SNAPSHOT</version>
                   <type>nar</type>
                   <classifier>i386-MacOSX-gpp-jni</classifier>
                   <overWrite>true</overWrite>
@@ -184,13 +167,20 @@
         <dependency>
           <groupId>net.mjahn</groupId>
           <artifactId>mem.agent</artifactId>
-          <version>0.1.0.SNAPSHOT</version>
+          <version>0.1.0-SNAPSHOT</version>
           <type>nar</type>
         </dependency>
         <dependency>
           <groupId>net.mjahn</groupId>
           <artifactId>mem.agent</artifactId>
-          <version>0.1.0.SNAPSHOT</version>
+          <version>0.1.0-SNAPSHOT</version>
+          <classifier>x86-Windows-gpp-jni</classifier>
+          <type>nar</type>
+        </dependency>
+        <dependency>
+          <groupId>net.mjahn</groupId>
+          <artifactId>mem.agent</artifactId>
+          <version>0.1.0-SNAPSHOT</version>
           <classifier>i386-MacOSX-gpp-jni</classifier>
           <type>nar</type>
         </dependency>
@@ -211,5 +201,19 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-  
+
+  <repositories>
+    <repository>
+      <id>my-nexus-oss-snapshots</id>
+      <name>Nexus OSS Snapshot Repository</name>
+      <url>http://oss.sonatype.org/content/groups/staging/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </repository>
+   </repositories>
 </project>
