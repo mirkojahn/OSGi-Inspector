@@ -1,7 +1,13 @@
 package net.mjahn.inspector.core.impl;
 
+import static net.mjahn.inspector.core.Constants.FRAMEWORK_EVENT_COUNT_DEFAULT_VALUE;
+import static net.mjahn.inspector.core.Constants.FRAMEWORK_EVENT_COUNT_PROPERTY;
+import static net.mjahn.inspector.core.Constants.INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,10 +17,6 @@ import net.mjahn.inspector.core.FrameworkInspector;
 import net.mjahn.inspector.core.ImportedPackage;
 import net.mjahn.inspector.core.OSGiRuntimeInfo;
 import net.mjahn.inspector.core.TrackedBundle;
-import static net.mjahn.inspector.core.Constants.INITIAL_BUNDLE_AMOUNT_PROPERTY;
-import static net.mjahn.inspector.core.Constants.INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE;
-import static net.mjahn.inspector.core.Constants.FRAMEWORK_EVENT_COUNT_PROPERTY;
-import static net.mjahn.inspector.core.Constants.FRAMEWORK_EVENT_COUNT_DEFAULT_VALUE;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
@@ -22,28 +24,14 @@ import org.osgi.service.packageadmin.PackageAdmin;
 
 public class FrameworkInspectorImpl implements FrameworkInspector {
 	
-	private ArrayList<TrackedBundleImpl> trackedBundles;
+	private Hashtable<Long,TrackedBundleImpl> trackedBundles;
 	private LinkedList<FrameworkEvent> fwEvents;
 	private LinkedList<FrameworkEvent> fwErrorEvents;
 	private int allowedFwEvents;
 	private OSGiRuntimeInfoImpl osgiRuntimeInfo;
 	
 	public FrameworkInspectorImpl() {
-		String initialBundleCount = System.getProperty(INITIAL_BUNDLE_AMOUNT_PROPERTY);
-		if(initialBundleCount != null && !initialBundleCount.equals("")){
-			try{
-				int count = Integer.parseInt(initialBundleCount);
-				if(count > 0){
-					trackedBundles = new ArrayList<TrackedBundleImpl>(count);
-				}else {
-					trackedBundles = new ArrayList<TrackedBundleImpl>(INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE);
-				}
-			} catch (Exception e) {
-				trackedBundles = new ArrayList<TrackedBundleImpl>(INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE);
-			}
-		} else {
-			trackedBundles = new ArrayList<TrackedBundleImpl>(INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE);
-		}
+		trackedBundles = new Hashtable<Long,TrackedBundleImpl>(INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE);
 		osgiRuntimeInfo = new OSGiRuntimeInfoImpl();
 		String initialEventCount = System.getProperty(FRAMEWORK_EVENT_COUNT_PROPERTY);
 		if(initialEventCount != null && !initialEventCount.equals("")){
@@ -71,7 +59,7 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 	}
 
 	public List<TrackedBundleImpl> getAllTrackedBundleImpls(){
-		return trackedBundles;
+    return Collections.list(trackedBundles.elements());
 	}
 	
 	/**
@@ -87,20 +75,22 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 	public TrackedBundleImpl getTrackedBundleImpl(long id){
 		TrackedBundleImpl tb;
 		try{
-			tb = trackedBundles.get((int)id);
+			tb = trackedBundles.get(id);
+      if(tb == null){
+        tb = new TrackedBundleImpl(id);
+      }
 		} catch (IndexOutOfBoundsException e){
 			// bundle not yet tracked
 			tb = new TrackedBundleImpl(id);
 //			System.out.println("###created new tracke bundle: "+ tb.getBundle().getSymbolicName());
-			Bundle b = tb.getBundle();
-			if(b == null){
-				// only if the bundle doesn't exist
-				return null;
-			}
-			trackedBundles.add((int)id,tb);
+			
+      //trackedBundles.ensureCapacity((int)id);
+			trackedBundles.put(id,tb);
 		}
-//		System.out.println("###gettingTrackedBundle"+tb.getBundle().getSymbolicName());
-		
+    if(tb.getBundle() == null){
+			// only if the bundle doesn't exist
+			return null;
+		}
 		return tb;
 	}
 
@@ -109,11 +99,11 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 	}
 	
 	void remove(long id){
-		trackedBundles.set((int)id, null);
+		trackedBundles.remove(id);
 	}
 	
 	void update(long id){
-		trackedBundles.remove((int)id);
+		remove(id);
 		// add the new one (has the same id)
 		getTrackedBundle(id);
 	}
@@ -147,7 +137,8 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 		StringBuilder builder = new StringBuilder();
 		builder.append("FrameworkInspectorImpl [\n");
 		if (trackedBundles != null) {
-			Iterator<TrackedBundleImpl>iter = trackedBundles.iterator();
+      ArrayList<TrackedBundleImpl> bundleList = Collections.list(trackedBundles.elements());
+			Iterator<TrackedBundleImpl>iter = bundleList.iterator();
 			while(iter.hasNext()){
 				TrackedBundleImpl bundle = iter.next();
 				builder.append(bundle.toString());

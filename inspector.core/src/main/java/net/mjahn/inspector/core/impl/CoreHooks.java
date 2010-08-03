@@ -36,7 +36,7 @@ public class CoreHooks implements FindHook, ListenerHook {
 
 	@SuppressWarnings("unchecked")
 	public void added(Collection coll) {
-		// should be empty, but anyway
+		// shouldn't be empty, but anyway
 		if (coll == null || coll.isEmpty()) {
 			return;
 		}
@@ -60,9 +60,13 @@ public class CoreHooks implements FindHook, ListenerHook {
 			ListenerInfo li = (ListenerInfo) iter.next();
 			// System.out.println("Remove Listener for bundle '"+li.getBundleContext().getBundle().getSymbolicName()
 			// + "' with filter: "+ li.getFilter());
-			long id = li.getBundleContext().getBundle().getBundleId();
-			TrackedBundleImpl tb = fwAnalyzer.getTrackedBundleImpl(id);
-			tb.removeListenerForService(li);
+      try{
+        long id = li.getBundleContext().getBundle().getBundleId();
+        TrackedBundleImpl tb = fwAnalyzer.getTrackedBundleImpl(id);
+        tb.removeListenerForService(li);
+      }catch (Exception e){
+        // the bundle context might be invalid... not nice, but can happen :-/
+      }
 		}
 
 	}

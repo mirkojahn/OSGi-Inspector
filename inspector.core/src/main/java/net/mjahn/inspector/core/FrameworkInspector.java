@@ -10,7 +10,7 @@ import org.osgi.framework.FrameworkEvent;
  * 
  * <p>The class gets exposed as an OSGi service and can be obtained by its class name. Browse 
  * the various methods in order to get an understanding what you can do with this API.
- * This is your one-stop shop to analyze an OSGi runtime without the need to fidle around with 
+ * This is your one-stop shop to analyze an OSGi runtime without the need to fiddle around with 
  * the pain of other OSGi services.</p>
  * 
  * 
