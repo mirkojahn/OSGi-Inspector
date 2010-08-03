@@ -1,0 +1,10 @@
+<html>
+	<head>
+		<title>net.mjahn.inspector.core</title>
+	</head>
+	<body>
+		<h1>Inspector Core</h1>
+		<p>The core API of the inspector framework. Take a look at the <code>FrameworkInspector</code> 
+		class to get started. </p>
+	</body>
+</html>

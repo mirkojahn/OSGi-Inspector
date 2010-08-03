@@ -1,0 +1,14 @@
+[Reasoner||String getReasonerName(); ReasonerResult analyze(JobDescription; ReasoningEngine; ReasonerResultCompiler){bg:orange}]
+[JobDescription||TrackedBundle getSourceBundle(); UUID getTaskId(); Hashtable:(String Object) getJobDetails()]
+[ReasonerResult||boolean hasNoClue(); float getSolutionConfidence(); String getResultMessage(); String getErrorCode()]
+[ReasonerResultCompiler||add(ReasonerResult);List:ReasonerResult getResults()]
+[ReasoningEngine||ReasonerResult reason(JobDescription; TrackedBundle; ReasonerResultCompiler)]
+[ReasoningServiceProvider||ReasonerResult reason(JobDescription; TrackedBundle){bg:green}]
+[ReasonerResult]<>*-[ReasonerResultCompiler]
+[ReasonerResult]^-[ReasonerResultCompiler]
+[ReasoningEngine]^-[ReasoningServiceProvider]
+[ReasoningServiceProvider]-[note:The exposed Service interface to trigger Reasoning{bg:cornsilk}]
+[ReasoningEngine]<>-[Reasoner]
+
+
+URL: http://yuml.me/52022ffd
