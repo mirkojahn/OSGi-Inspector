@@ -5,7 +5,8 @@ import java.util.Hashtable;
 import javax.servlet.ServletException;
 
 import net.mjahn.inspector.core.FrameworkInspector;
-import net.mjahn.inspector.reasoner.Reasoner;
+import net.mjahn.inspector.core.reasoner.Reasoner;
+import net.mjahn.inspector.core.reasoner.ReasoningServiceProvider;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -36,7 +37,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 		httpTracker.open();
 		fwTracker = new ServiceTracker(context, FrameworkInspector.class.getName(), null);
 		fwTracker.open();
-		rsTracker = new ServiceTracker(context, Reasoner.class.getName(), null);
+		rsTracker = new ServiceTracker(context, ReasoningServiceProvider.class.getName(), null);
 		rsTracker.open();
 	}
 
@@ -59,8 +60,8 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 		return (FrameworkInspector)fwTracker.getService();
 	}
 	
-	public static Reasoner getReasoner() {
-		return (Reasoner)rsTracker.getService();
+	public static ReasoningServiceProvider getReasoningServiceProvider() {
+		return (ReasoningServiceProvider)rsTracker.getService();
 	}
 	
 	public static BundleContext getBundleContext(){
