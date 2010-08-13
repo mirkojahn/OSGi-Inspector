@@ -19,8 +19,8 @@ public class CoreHooks implements FindHook, ListenerHook {
 			boolean obtainAll, Collection serviceReferences) {
 		// track services that are not found
 		if (serviceReferences == null || serviceReferences.isEmpty()) {
-			NotFoundServiceCallImpl nfsc = new NotFoundServiceCallImpl(ctx
-					.getBundle(), serviceName, filter, obtainAll);
+			NotFoundServiceCallImpl nfsc = new NotFoundServiceCallImpl(
+					ctx.getBundle(), serviceName, filter, obtainAll);
 			// System.out.println("Not satisfied service Request: "+ctx.getBundle().getSymbolicName()
 			// + " " + serviceName + " " + filter);
 			fwAnalyzer.getTrackedBundleImpl(ctx.getBundle().getBundleId())
@@ -60,13 +60,14 @@ public class CoreHooks implements FindHook, ListenerHook {
 			ListenerInfo li = (ListenerInfo) iter.next();
 			// System.out.println("Remove Listener for bundle '"+li.getBundleContext().getBundle().getSymbolicName()
 			// + "' with filter: "+ li.getFilter());
-      try{
-        long id = li.getBundleContext().getBundle().getBundleId();
-        TrackedBundleImpl tb = fwAnalyzer.getTrackedBundleImpl(id);
-        tb.removeListenerForService(li);
-      }catch (Exception e){
-        // the bundle context might be invalid... not nice, but can happen :-/
-      }
+			try {
+				long id = li.getBundleContext().getBundle().getBundleId();
+				TrackedBundleImpl tb = fwAnalyzer.getTrackedBundleImpl(id);
+				tb.removeListenerForService(li);
+			} catch (Exception e) {
+				// the bundle context might be invalid... not nice, but can
+				// happen :-/
+			}
 		}
 
 	}

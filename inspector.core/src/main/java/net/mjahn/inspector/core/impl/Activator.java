@@ -16,6 +16,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.packageadmin.PackageAdmin;
@@ -156,4 +158,5 @@ public class Activator implements BundleActivator, SynchronousBundleListener, Fr
     public static ReasoningServiceProvider getReasoningServiceProvider(){
         return engine;
     }
+
 }
