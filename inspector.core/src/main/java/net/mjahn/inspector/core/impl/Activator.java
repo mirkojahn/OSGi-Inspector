@@ -29,7 +29,6 @@ public class Activator implements BundleActivator, SynchronousBundleListener, Fr
     private static FrameworkInspectorImpl fwInspector;
     private final static String equinoxCommandInterfaceName =
             "org.eclipse.osgi.framework.console.CommandProvider";
-    ServiceRegistration myServRef = null;
     private static ServiceTracker rtTracker = null;
     private static ServiceTracker packageAdminTracker = null;
     private static ReasoningServiceProvider engine = null;

@@ -38,7 +38,7 @@ class BundleNode implements IBundleNode, ITreeModel {
     }
 
     public BundleNode(final long id) throws ServiceException {
-        this.bundleId = new Long(id);
+        this.bundleId = Long.valueOf(id);
         Bundle bundle = ComponentService._context.getBundle(id);
         if (bundle == null)
             throw new ServiceException("Bundle with id "
@@ -189,7 +189,7 @@ class BundleNode implements IBundleNode, ITreeModel {
             whereTo = whereToAdd;
         }
         // add, if equal
-        if (whereTo.getId() == this.getId())
+        if (whereTo.getId().equals(this.getId()))
             addNode(rootInstance);
         if (this.nodes.containsKey(whereTo.getId())) {
             (this.nodes.get(whereTo.getId())).addNode(rootInstance);

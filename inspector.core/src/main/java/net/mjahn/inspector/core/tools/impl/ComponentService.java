@@ -11,12 +11,12 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class ComponentService {
 
-    protected static BundleContext _context = null;
+    static BundleContext _context = null;
     ServiceReference _reference = null;
     PackageAdmin _admin = null;
     private volatile IBundleNode _rootNode = null;
     private BundleChangeListener _bListener = null;
-    static ComponentService componentService = null;
+    volatile static ComponentService componentService = null;
 
     // listener for components lifecycle
     static class BundleChangeListener implements BundleListener {
@@ -91,7 +91,7 @@ public class ComponentService {
     synchronized void addDependencyToBundle(final Bundle bundle, final Bundle[] reqBundles) {
         IBundleNode node = null;
         // check if the "bundle" was already added to our tree
-        if ((node = this._rootNode.getNode(new Long(bundle.getBundleId()))) == null) {
+        if ((node = this._rootNode.getNode(Long.valueOf(bundle.getBundleId()))) == null) {
             // no, so create the node
             try {
                 node = new BundleNode(bundle.getBundleId());
@@ -158,7 +158,7 @@ public class ComponentService {
      * @return all bundles that the given bundle requires
      */
     public static Bundle[] getDependantBundles(final Bundle bundle, final boolean recursive) {
-        Long bundleID = new Long(bundle.getBundleId());
+        Long bundleID = Long.valueOf(bundle.getBundleId());
         IBundleNode node = componentService._rootNode.getNode(bundleID);
         return node.getNodes(recursive);
     }
