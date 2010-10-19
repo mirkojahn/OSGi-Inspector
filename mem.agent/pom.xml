@@ -3,13 +3,12 @@
   <parent>
     <groupId>net.mjahn</groupId>
     <artifactId>inspector</artifactId>
-    <version>0.1.0.SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.mjahn</groupId>
   <artifactId>mem.agent</artifactId>
-  <version>0.1.0.SNAPSHOT</version>
   <name>net.mjahn.inspector.mem.agent (native JNI/JVMTI agent)</name>
   <description>The inspector agent analyzing the memory footprint of the OSGi runtime.</description>
   <packaging>nar</packaging>
