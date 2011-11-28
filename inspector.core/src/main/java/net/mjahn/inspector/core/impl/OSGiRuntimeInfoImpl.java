@@ -41,6 +41,8 @@ public class OSGiRuntimeInfoImpl implements OSGiRuntimeInfo {
 			return "4.1.0";
 		} else if(v.equals(new Version("1.5"))){
 			return "4.2.0";
+		} else if(v.equals(new Version("1.6"))){
+			return "4.3.0";
 		} else {
 			return "unknown";
 		}

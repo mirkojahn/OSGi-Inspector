@@ -1,0 +1,2 @@
+In order to build this native library with OS X 10.7 aka Lion, do not forget to make the headers available relative to your JAVA_HOME, f.i.:
+sudo ln -s /System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/include

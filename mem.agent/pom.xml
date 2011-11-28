@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-    <groupId>net.mjahn</groupId>
-    <artifactId>inspector</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
-  </parent>
-  
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.mjahn</groupId>
   <artifactId>mem.agent</artifactId>
   <name>net.mjahn.inspector.mem.agent (native JNI/JVMTI agent)</name>
   <description>The inspector agent analyzing the memory footprint of the OSGi runtime.</description>
   <packaging>nar</packaging>
+  
+  <parent>
+    <groupId>net.mjahn</groupId>
+    <artifactId>inspector</artifactId>
+    <version>0.1.1-SNAPSHOT</version>
+  </parent>
   
   
   <developers>
@@ -33,7 +33,10 @@
       <activation>
         <os>
           <name>Mac OS X</name>
-          <arch>i386</arch>
+          <!-- for OS X 1.6 -->
+          <!--arch>i386</arch-->
+          <!-- for OS X 1.7 Lion -->
+          <!--arch>x86_64</arch-->
         </os>
       </activation>
       <build>
@@ -104,6 +107,8 @@
       </build>
     </profile>
   </profiles>
+  
+  
   <!-- see for usage: http://duns.github.com/maven-nar-plugin/usage.html -->
   <distributionManagement>
     <downloadUrl>http://github.com/mirkojahn/OSGi-Inspector/downloads</downloadUrl>
@@ -169,6 +174,17 @@
       </releases>
       <snapshots>
         <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>nar-plugin</id>
+      <url>http://duns.github.com/maven-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
       </snapshots>
     </pluginRepository>
   </pluginRepositories>

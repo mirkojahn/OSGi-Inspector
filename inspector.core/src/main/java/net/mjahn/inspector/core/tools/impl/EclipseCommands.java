@@ -51,7 +51,7 @@ public class EclipseCommands extends AbstractUtilCommand implements CommandProvi
         sBuilder.append("---Handy tools for the OSGi runtime---\n");
         sBuilder.append("\tbbn - (short for get >>Bundle By Name<< of one of its classes) "
                 + "returns the bundle(s) for a given full qualified class name.\n");
-        sBuilder.append("\tcheckFW - check thrown BundleExceptions within the Eclipse Runtime and try to reason about the cause.\n");
+        sBuilder.append("\tcheckFW - check thrown BundleExceptions within the Eclipse Runtime and try to reason about the cause. (options are -a for all and -t for the confidence threshold like -t0.8f for 0.8f confidence.\n");
         sBuilder.append("\tpendingSR [<bundle id>] - check pending OSGi Service requests. If a list of bundle ids is given, only the bundles listed will be shown (space separated).\n");
         sBuilder.append("\tfailedSR [<bundle id>] - check for failed OSGi Service Requests tracked so far. If a list of bundle ids is given, only the bundles listed will be shown (space separated).\n");
         return sBuilder.toString();
@@ -91,6 +91,22 @@ public class EclipseCommands extends AbstractUtilCommand implements CommandProvi
     public void _checkFW(final CommandInterpreter ci) throws Exception {
         List<FrameworkEvent> fwEvents = Activator.getFrameworkInspectorImpl().getErrorFrameworkEvents();
         ReasoningServiceProvider rsprov = Activator.getReasoningServiceProvider();
+        
+        boolean returnAll = false;
+        float threshold = -0.1f;
+        do {
+        	String arg = ci.nextArgument();
+        	if(arg == null){
+        		break;
+        	}
+        	if(arg.equalsIgnoreCase("-a")){
+	        	returnAll = true;
+	        } else if(arg.startsWith("-t")){
+	        	threshold = Float.parseFloat(arg.substring(2));
+	        }
+		} while (true);
+        
+	    	
         if (fwEvents.isEmpty()) {
             ci.println("No Error detected");
         } else {
@@ -101,17 +117,21 @@ public class EclipseCommands extends AbstractUtilCommand implements CommandProvi
                     FrameworkEvent e = iter.next();
                     JobDescription jd = new JobDescriptionBase(null, Activator.getFrameworkInspectorImpl().getTrackedBundle(e.getBundle().getBundleId()), Activator.getFrameworkInspectorImpl().getTrackedBundle(e.getBundle().getBundleId()), null, e.getThrowable());
                     ReasonerResult result = rsprov.reason(jd);
+                    if(returnAll == false && result.isConfident() == false){
+                    	continue;
+                    } else if (returnAll == false && result.getConfidenceLevel() > threshold) {
+                    	
+                    }
                     if (result != null) {
-                        ci.println(
-                                "Bundle: " + e.getBundle().getBundleId() + " /r/n"
-                                + " Confidence: " + result.getConfidenceLevel() + " /r/n"
-                                + " Error Type: " + getErrorTypeString(((BundleException) e.getThrowable()).getType()) + " /r/n"
-                                + " Error Message:" + result.getResultMessage());
-                    } else {
-                        ci.println(
-                                "Bundle: " + e.getBundle().getBundleId() + " /r/n"
-                                + " Error Type: " + getErrorTypeString(((BundleException) e.getThrowable()).getType()) + " /r/n"
-                                + " Error Message: no reasoner for this type available yet.");
+                        ci.println("Bundle: " + e.getBundle().getBundleId() + " " + e.getBundle().getSymbolicName());
+                        ci.println(" Confidence: " + result.getConfidenceLevel());
+                        ci.println(" Error Type: " + getErrorTypeString(((BundleException) e.getThrowable()).getType()));
+                        ci.println(" Proposed Fix:" + result.getResultMessage());
+                        ci.println(" Exception: " + e.getThrowable().toString());
+                    } else {// this should never happen
+                        ci.println("Bundle: " + e.getBundle().getBundleId() + " " + e.getBundle().getSymbolicName());
+                        ci.println(" Error Type: " + getErrorTypeString(((BundleException) e.getThrowable()).getType()));
+                        ci.println(" Error Message: no reasoner for this type available yet.");
                     }
                 } catch (InvalidInvocationException ex) {
                     Logger.getLogger(EclipseCommands.class.getName()).log(Level.SEVERE, null, ex);

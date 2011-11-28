@@ -6,7 +6,12 @@ package net.mjahn.inspector.core;
  */
 public class InvalidInvocationException extends Exception {
 
-    public InvalidInvocationException(String desc) {
+    /**
+	 * default serial Id
+	 */
+	private static final long serialVersionUID = 7446637675620215054L;
+
+	public InvalidInvocationException(String desc) {
         super(desc);
     }
 

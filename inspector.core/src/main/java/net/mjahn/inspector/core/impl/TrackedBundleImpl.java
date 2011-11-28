@@ -10,6 +10,7 @@ import net.mjahn.inspector.core.ImportedPackage;
 import net.mjahn.inspector.core.ListenerInfo;
 import net.mjahn.inspector.core.NotFoundServiceCall;
 import net.mjahn.inspector.core.TrackedBundle;
+import net.mjahn.inspector.core.TrackedRequiredBundle;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -29,9 +30,11 @@ public class TrackedBundleImpl implements TrackedBundle {
 	private ArrayList<ExportedPackage> exportedPackages = null;
 	private ArrayList<ImportedPackage> importedPackages = null;
 	private ArrayList<ImportedPackage> dynImportedPackages = null;
-
+	private ArrayList<TrackedRequiredBundle> requiredBundles = null;
+	
 	private Object guard = new Object();
 	private Object guardImp = new Object();
+	private Object guardReqBund = new Object();
 	private Object guardDynImp = new Object();
 	private Object guardExp = new Object();
 
@@ -110,7 +113,6 @@ public class TrackedBundleImpl implements TrackedBundle {
 	 *
 	 * @see net.mjahn.inspector.core.TrackedBundle#getImportedPackages()
 	 */
-	@SuppressWarnings("unchecked")
 	public List<ImportedPackage> getImportedPackages() {
 		// lazy parsing
 		synchronized (guardImp) {
@@ -118,6 +120,7 @@ public class TrackedBundleImpl implements TrackedBundle {
 				return importedPackages;
 			}
 			importedPackages = new ArrayList<ImportedPackage>();
+			@SuppressWarnings("rawtypes")
 			Dictionary headers = getBundle().getHeaders();
 			String packagesString = (String) headers
 					.get(Constants.IMPORT_PACKAGE);
@@ -129,13 +132,38 @@ public class TrackedBundleImpl implements TrackedBundle {
 		}
 		return importedPackages;
 	}
+	
+	
+	/**
+	 * @{inheritDoc}
+	 *
+	 * @see net.mjahn.inspector.core.TrackedBundle#getRequiredBundles()
+	 */
+	public List<TrackedRequiredBundle> getRequiredBundles() {
+		// lazy parsing
+		synchronized (guardReqBund) {
+			if (requiredBundles != null) {
+				return requiredBundles;
+			}
+			requiredBundles = new ArrayList<TrackedRequiredBundle>();
+			@SuppressWarnings("rawtypes")
+			Dictionary headers = getBundle().getHeaders();
+			String requiredBundlesString = (String) headers
+					.get(Constants.REQUIRE_BUNDLE);
+			Object[][][] parsed = Util.parseStandardHeader(requiredBundlesString);
+			for (int i = 0; i < parsed.length; i++) {
+				requiredBundles.add(new TrackedRequiredBundleImpl(parsed[i],
+						bundleId));
+			}
+		}
+		return requiredBundles;
+	}
 
 	/**
 	 * @{inheritDoc}
 	 *
 	 * @see net.mjahn.inspector.core.TrackedBundle#getExportedPackages()
 	 */
-	@SuppressWarnings("unchecked")
 	public List<ExportedPackage> getExportedPackages() {
 		synchronized (guardExp) {
 			// lazy parsing
@@ -143,6 +171,7 @@ public class TrackedBundleImpl implements TrackedBundle {
 				return exportedPackages;
 			}
 			exportedPackages = new ArrayList<ExportedPackage>();
+			@SuppressWarnings("rawtypes")
 			Dictionary headers = getBundle().getHeaders();
 			String packagesString = (String) headers
 					.get(Constants.EXPORT_PACKAGE);
@@ -215,7 +244,6 @@ public class TrackedBundleImpl implements TrackedBundle {
 	 *
 	 * @see net.mjahn.inspector.core.TrackedBundle#getDynamicImportedPackages()
 	 */
-	@SuppressWarnings("unchecked")
 	public List<ImportedPackage> getDynamicImportedPackages() {
 		synchronized (guardDynImp) {
 			// lazy parsing
@@ -223,6 +251,7 @@ public class TrackedBundleImpl implements TrackedBundle {
 				return dynImportedPackages;
 			}
 			dynImportedPackages = new ArrayList<ImportedPackage>();
+			@SuppressWarnings("rawtypes")
 			Dictionary headers = getBundle().getHeaders();
 			String packagesString = (String) headers
 					.get(Constants.DYNAMICIMPORT_PACKAGE);
@@ -240,8 +269,8 @@ public class TrackedBundleImpl implements TrackedBundle {
 	 *
 	 * @see net.mjahn.inspector.core.TrackedBundle#hasDynamicImport()
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean hasDynamicImport() {
+		@SuppressWarnings("rawtypes")
 		Dictionary headers = getBundle().getHeaders();
 		String packagesString = (String) headers
 				.get(Constants.DYNAMICIMPORT_PACKAGE);

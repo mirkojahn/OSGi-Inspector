@@ -74,7 +74,8 @@ public interface FrameworkInspector {
 	
 	/**
      * For a given full qualified class name, all possible bundles, providing this class will be
-     * returned.
+     * returned. In case you do not want to invoke a class loader try the {@code getBundlesContainingClass}
+     * method instead.
      * 
      * @param fqcn like java.lang.Object
      * @return an array of Bundles, defining this class or null if non of the bundle class loaders
@@ -83,6 +84,17 @@ public interface FrameworkInspector {
      */
     public Bundle[] getBundleForClassName(final String fqcn);
 
+    
+    /**
+     * For a given full qualified class name, all possible bundles, providing this class will be
+     * returned. This method will NOT invoke any ClassLoader!
+     * 
+     * @param fqcn like java.lang.Object
+     * @return an array of Bundles, defining this class or null if non of the bundles contain the class.
+     * @version 1.0
+     */
+    public Bundle[] getBundlesContainingClass(final String fullQualifiedClassName);
+    
     /**
      * If you need to know, which Bundle actually defined a certain class, this is the method to
      * use.

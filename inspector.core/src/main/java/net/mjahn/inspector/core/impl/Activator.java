@@ -21,6 +21,7 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.service.startlevel.StartLevel;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class Activator implements BundleActivator, SynchronousBundleListener, FrameworkListener {
@@ -31,7 +32,9 @@ public class Activator implements BundleActivator, SynchronousBundleListener, Fr
             "org.eclipse.osgi.framework.console.CommandProvider";
     private static ServiceTracker rtTracker = null;
     private static ServiceTracker packageAdminTracker = null;
+    private static ServiceTracker startLevelTracker = null;
     private static ReasoningServiceProvider engine = null;
+    public static String START_LEVEL_PROPERTY = "net.mjahn.inspector.start.level";
 
     /*
      * (non-Javadoc)
@@ -44,6 +47,9 @@ public class Activator implements BundleActivator, SynchronousBundleListener, Fr
                 new ServiceTracker(ctx, PackageAdmin.class.getName(), null);
         packageAdminTracker.open();
 
+        startLevelTracker =
+                new ServiceTracker(ctx, StartLevel.class.getName(), null);
+        startLevelTracker.open();
         // create the entry object used for all further investigation
         fwInspector = new FrameworkInspectorImpl();
 
@@ -60,6 +66,11 @@ public class Activator implements BundleActivator, SynchronousBundleListener, Fr
             }
         }
 
+        startLevelTracker = new ServiceTracker(context, StartLevel.class.getName(), null);
+        startLevelTracker.open();
+        // try setting the bundle startlevel to a meaningful value.
+        manageStartLevel();
+        
         // create listener for newly installed bundles
         ctx.addBundleListener(this);
 
@@ -156,6 +167,26 @@ public class Activator implements BundleActivator, SynchronousBundleListener, Fr
 
     public static ReasoningServiceProvider getReasoningServiceProvider(){
         return engine;
+    }
+    
+    
+    private void manageStartLevel(){
+        // ensure that the core bundle is started first or at least at a time defined
+        if(startLevelTracker != null){
+            StartLevel startLevel = (StartLevel)startLevelTracker.getService();
+            if(startLevel != null){
+                int sLevel = startLevel.getBundleStartLevel(ctx.getBundle());
+                int defStartLevel = 1;
+                Object defStartLevelObject = System.getProperty(START_LEVEL_PROPERTY);
+                if(defStartLevelObject != null){
+                    defStartLevel = Integer.getInteger((String)defStartLevelObject);
+                }
+                if(sLevel != defStartLevel){
+                	System.out.println("Setting bundle startlevel to: "+defStartLevel);
+                	startLevel.setBundleStartLevel(ctx.getBundle(), defStartLevel);
+                }
+            }
+        }
     }
 
 }

@@ -83,6 +83,15 @@ public interface TrackedBundle {
 	public List<ExportedPackage> getExportedPackages();
 	
 	/**
+	 * <p>Obtain the list of all bundles this bundle defines as required. This is the definition as found in the 
+	 * manifest file. Gathering of this is done once lazy up-on the first request.</p>
+	 * 
+	 * @since 1.0
+	 * @return a list with the bundles required by this Bundle as defined in the manifest file  or an empty list (never null).
+	 */
+	public List<TrackedRequiredBundle> getRequiredBundles();
+	
+	/**
 	 * Similar to {@code getExportedPackages()}, but also takes into account, if this bundle has fragments attached and adds
 	 * those to the list of exported packages.
 	 * 

@@ -14,7 +14,7 @@
 
 JNIEXPORT void JNICALL Java_net_mjahn_mem_agent_Core_nativePrint
         (JNIEnv *env, jobject obj){
-    printf("\nHello World - written in C ;-)\n");
+    fprintf(stdout, "\nHello World - written in C ;-)\n");
 
 }
 
@@ -79,7 +79,7 @@ version_check(jint cver, jint rver)
 			cmajor, cminor, cmicro, cver);
     fprintf(stdout, "Run Time JVMTI Version: %d.%d.%d (0x%08x)\n",
 			rmajor, rminor, rmicro, rver);
-    if ( cmajor != rmajor || cminor != rminor ) {
+    if ( cmajor > rmajor || cminor > rminor ) {
 	fprintf(stderr,
 	    "ERROR: Compile Time JVMTI and Run Time JVMTI are incompatible\n");
 	exit(1);

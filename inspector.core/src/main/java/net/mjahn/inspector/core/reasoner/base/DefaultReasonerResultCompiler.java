@@ -12,6 +12,9 @@ public class DefaultReasonerResultCompiler implements ReasonerResultCompiler{
 	ArrayList<ReasonerResult> results = new ArrayList<ReasonerResult>();
 	ReasonerResult finalResult;
 
+	public DefaultReasonerResultCompiler(){
+		results.add(new NoClueReasonerResult());
+	}
 	public void add(ReasonerResult result) {
 		results.add(result);		
 	}

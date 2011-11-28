@@ -4,6 +4,7 @@ import static net.mjahn.inspector.core.Constants.FRAMEWORK_EVENT_COUNT_DEFAULT_V
 import static net.mjahn.inspector.core.Constants.FRAMEWORK_EVENT_COUNT_PROPERTY;
 import static net.mjahn.inspector.core.Constants.INITIAL_BUNDLE_AMOUNT_DEFAULT_VALUE;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import net.mjahn.inspector.core.FrameworkInspector;
 import net.mjahn.inspector.core.ImportedPackage;
 import net.mjahn.inspector.core.OSGiRuntimeInfo;
 import net.mjahn.inspector.core.TrackedBundle;
+import net.mjahn.inspector.core.reasoner.base.Utils;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
@@ -219,6 +221,23 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 			}
 		}
 		return classes.toArray(new Class<?>[classes.size()]);
+	}
+	
+	public Bundle[] getBundlesContainingClass(final String fullQualifiedClassName){
+		Bundle[] bundles = Activator.getContext().getBundles();
+		String[] packageAndClassName = Utils.splitPackageAndClassForSearch(fullQualifiedClassName);
+		HashSet<Bundle> matchingBundles = new HashSet<Bundle>();
+		for (int i = 0; i < bundles.length; i++) {
+			try {
+				URL url = bundles[i].getEntry(packageAndClassName[2]);
+				if(url != null){
+					matchingBundles.add(bundles[i]);
+				}
+			} catch (Throwable t){
+				// do nothing, this might happen in case the bundle got uninstalled
+			}
+		}
+		return matchingBundles.toArray(new Bundle[matchingBundles.size()]);
 	}
 
 	// TODO: think about a more lightweight fw Event

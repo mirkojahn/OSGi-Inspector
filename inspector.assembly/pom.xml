@@ -4,23 +4,22 @@
     <parent>
         <groupId>net.mjahn</groupId>
         <artifactId>inspector</artifactId>
-        <version>0.1.0.SNAPSHOT</version>
+        <version>0.1.1-SNAPSHOT</version>
     </parent>
 
     <groupId>net.mjahn</groupId>
     <artifactId>inspector.assembly</artifactId>
     <description>Inspector Distribution Assembly</description>
-    <version>0.1.0.SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>net.mjahn.inspector.assembly (Assembly)</name>
 
     <properties>
-        <mem.agent.version>0.1.0-SNAPSHOT</mem.agent.version>
+        <mem.agent.version>${project.version}</mem.agent.version>
     </properties>
 
     <build>
       <plugins>
-      <!--plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
@@ -32,10 +31,10 @@
             </goals>
             <configuration>
               <artifactItems>
-                <artifactItem>
+                <!--artifactItem>
                   <groupId>net.mjahn</groupId>
                   <artifactId>mem.agent</artifactId>
-                  <version>0.1.0-SNAPSHOT</version>
+                  <version>${project.version}</version>
                   <type>nar</type>
                   <classifier>x86-Windows-gpp-jni</classifier>
                   <overWrite>true</overWrite>
@@ -45,9 +44,19 @@
                 <artifactItem>
                   <groupId>net.mjahn</groupId>
                   <artifactId>mem.agent</artifactId>
-                  <version>0.1.0-SNAPSHOT</version>
+                  <version>${project.version}</version>
                   <type>nar</type>
                   <classifier>i386-MacOSX-gpp-jni</classifier>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>target/nar</outputDirectory>
+                  <excludes>*.xml</excludes>
+                </artifactItem -->
+                <artifactItem>
+                  <groupId>net.mjahn</groupId>
+                  <artifactId>mem.agent</artifactId>
+                  <version>${project.version}</version>
+                  <type>nar</type>
+                  <classifier>x86_64-MacOSX-gpp-jni</classifier>
                   <overWrite>true</overWrite>
                   <outputDirectory>target/nar</outputDirectory>
                   <excludes>*.xml</excludes>
@@ -84,7 +93,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin -->
+      </plugin>
 
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
@@ -100,9 +109,6 @@
               <configuration>
                 <descriptors>
                   <descriptor>src/assembly/descriptor.xml</descriptor>
-                  <!--descriptor>src/assembly/x86-Windows-msvc.xml</descriptor-->
-                  <!--descriptor>src/assembly/i386-MacOSX-g++.xml</descriptor-->
-                  <!--descriptor>src/assembly/i386-Linux-g++.xml</descriptor-->
                 </descriptors>
                 <includeScope>compile</includeScope>
                 <stripVersion>true</stripVersion>
@@ -164,26 +170,33 @@
             <artifactId>org.apache.felix.fileinstall</artifactId>
             <version>2.0.8</version>
         </dependency>
-        <!--dependency>
-          <groupId>net.mjahn</groupId>
-          <artifactId>mem.agent</artifactId>
-          <version>0.1.0-SNAPSHOT</version>
-          <type>nar</type>
-        </dependency>
         <dependency>
           <groupId>net.mjahn</groupId>
           <artifactId>mem.agent</artifactId>
-          <version>0.1.0-SNAPSHOT</version>
+          <version>${pom.version}</version>
+          <type>nar</type>
+        </dependency>
+        <!--dependency>
+          <groupId>net.mjahn</groupId>
+          <artifactId>mem.agent</artifactId>
+          <version>${pom.version}</version>
           <classifier>x86-Windows-gpp-jni</classifier>
           <type>nar</type>
         </dependency>
         <dependency>
           <groupId>net.mjahn</groupId>
           <artifactId>mem.agent</artifactId>
-          <version>0.1.0-SNAPSHOT</version>
+          <version>${pom.version}</version>
           <classifier>i386-MacOSX-gpp-jni</classifier>
           <type>nar</type>
-        </dependency -->
+        </dependency>
+        <dependency>
+          <groupId>net.mjahn</groupId>
+          <artifactId>mem.agent</artifactId>
+          <version>${pom.version}</version>
+          <classifier>x86_64-MacOSX-gpp-jni</classifier>
+          <type>nar</type>
+        </dependency-->
     </dependencies>
 
   <pluginRepositories>

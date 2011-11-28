@@ -14,7 +14,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import net.mjahn.inspector.core.ListenerInfo;
 
 public class Activator implements BundleActivator, CommandProvider {
 	

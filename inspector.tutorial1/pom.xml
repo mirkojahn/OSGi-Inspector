@@ -34,18 +34,6 @@
         <dependency>
             <groupId>org.sonatype.tycho</groupId>
             <artifactId>org.eclipse.osgi</artifactId>
-            <version>3.5.1.R35x_v20090827</version>
-            <optional>true</optional>
         </dependency>
     </dependencies>
-  
-  
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>

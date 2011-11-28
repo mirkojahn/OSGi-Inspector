@@ -27,7 +27,7 @@ goto:eof
 echo Starting Memory Profiling Inspector Runtime
 set LOCALPATH=%~dp0
 set LIB_PATH=%LOCALPATH%libs
-rem CALL java -verbose %JAVA_OPTS% -Djava.library.path="%LIB_PATH%" -agentlib:"mem.agent-0.1.0.SNAPSHOT" -Dmem.agent.version=0.1.0.SNAPSHOT -cp ".;%_SCRIPTS_%;%_SCRIPTS_%libs;%_SCRIPTS_%\pax\pax-runner.jar" org.ops4j.pax.runner.Run --args="file:tutorial1.args" %2 %3 %4 %5 %6 %7 %8 %9
+rem CALL java -verbose %JAVA_OPTS% -Djava.library.path="%LIB_PATH%" -agentlib:"mem.agent-0.1.1.SNAPSHOT" -Dmem.agent.version=0.1.1.SNAPSHOT -cp ".;%_SCRIPTS_%;%_SCRIPTS_%libs;%_SCRIPTS_%\pax\pax-runner.jar" org.ops4j.pax.runner.Run --args="file:tutorial1.args" %2 %3 %4 %5 %6 %7 %8 %9
 CALL java -verbose %JAVA_OPTS% -agentpath:%LIB_PATH%\mem.agent-${mem.agent.version}.dll -Dmem.agent.version=${mem.agent.version} -cp ".;%_SCRIPTS_%;%_SCRIPTS_%libs;%_SCRIPTS_%\pax\pax-runner.jar" org.ops4j.pax.runner.Run --args="file:runner-grizzly.args" %2 %3 %4 %5 %6 %7 %8 %9
 goto:eof
 
