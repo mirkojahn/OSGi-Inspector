@@ -158,7 +158,7 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 	}
 
 	/**
-	 * FIXME: add comment
+	 * {@inheritDoc}
 	 * 
 	 * @version 1.0
 	 */
@@ -175,7 +175,7 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 	}
 
 	/**
-	 * TODO: Add comment
+	 * {@inheritDoc}
 	 * 
 	 * @see net.mjahn.tools.inspector.IBundleUtils#getBundleForClass(java.lang.Class)
 	 * @version 1.0
@@ -239,8 +239,6 @@ public class FrameworkInspectorImpl implements FrameworkInspector {
 		}
 		return matchingBundles.toArray(new Bundle[matchingBundles.size()]);
 	}
-
-	// TODO: think about a more lightweight fw Event
 
 	synchronized void addFrameworkEvent(FrameworkEvent event) {
 		if (event.getType() == FrameworkEvent.STARTED) {

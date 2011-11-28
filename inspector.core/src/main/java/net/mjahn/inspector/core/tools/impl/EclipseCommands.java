@@ -64,7 +64,6 @@ public class EclipseCommands extends AbstractUtilCommand implements CommandProvi
      * @since 1.0
      */
     public void _bbn(final CommandInterpreter ci) throws Exception {
-        // FIXME: allow more than one parameter
         Set<String> fqcns = new HashSet<String>();
         String fqcn = null;
         do {
