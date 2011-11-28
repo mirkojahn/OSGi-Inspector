@@ -9,9 +9,6 @@ import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
 
 import java.net.URL;
-import java.util.Enumeration;
-
-import net.mjahn.inspector.core.reasoner.base.Utils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -67,7 +64,7 @@ public class TestFramework {
 		assertThat(ctx, is(notNullValue()));
 		String className = this.getClass().getName();
 		// format it to find a class
-		String newClassName = className.replace(".", "/")+".class";
+//		String newClassName = className.replace(".", "/")+".class";
 		
 //		System.out.println("*************   Trying to find class with name: "+newClassName);
 		String[] packageAndClass = splitPackageAndClassForSearch(className);

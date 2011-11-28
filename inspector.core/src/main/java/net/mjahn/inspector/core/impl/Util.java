@@ -37,6 +37,7 @@ public class Util {
 
 			String[] clauseStrings = parseDelimitedString(header, ",");
 
+			@SuppressWarnings("rawtypes")
 			List completeList = new ArrayList();
 			for (int i = 0; (clauseStrings != null)
 					&& (i < clauseStrings.length); i++) {
@@ -80,7 +81,9 @@ public class Util {
 		System.arraycopy(pieces, 0, paths, 0, pathCount);
 
 		// Parse the directives/attributes.
+		@SuppressWarnings("rawtypes")
 		Map dirsMap = new HashMap();
+		@SuppressWarnings("rawtypes")
 		Map attrsMap = new HashMap();
 		int idx = -1;
 		String sep = null;
@@ -165,6 +168,7 @@ public class Util {
 			value = "";
 		}
 
+		@SuppressWarnings("rawtypes")
 		List list = new ArrayList();
 
 		int CHAR = 1;

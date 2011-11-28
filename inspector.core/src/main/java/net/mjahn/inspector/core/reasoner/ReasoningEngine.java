@@ -1,7 +1,6 @@
 package net.mjahn.inspector.core.reasoner;
 
 import net.mjahn.inspector.core.InvalidInvocationException;
-import net.mjahn.inspector.core.TrackedBundle;
 
 /**
  * Engine provided for creating sub-reasoning.

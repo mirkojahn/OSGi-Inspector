@@ -14,9 +14,8 @@ public class CoreHooks implements FindHook, ListenerHook {
 		fwAnalyzer = analyzer;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void find(BundleContext ctx, String serviceName, String filter,
-			boolean obtainAll, Collection serviceReferences) {
+			boolean obtainAll, @SuppressWarnings("rawtypes") Collection serviceReferences) {
 		// track services that are not found
 		if (serviceReferences == null || serviceReferences.isEmpty()) {
 			NotFoundServiceCallImpl nfsc = new NotFoundServiceCallImpl(
@@ -34,12 +33,12 @@ public class CoreHooks implements FindHook, ListenerHook {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public void added(Collection coll) {
+	public void added(@SuppressWarnings("rawtypes") Collection coll) {
 		// shouldn't be empty, but anyway
 		if (coll == null || coll.isEmpty()) {
 			return;
 		}
+		@SuppressWarnings("rawtypes")
 		Iterator iter = coll.iterator();
 		while (iter.hasNext()) {
 			ListenerInfo li = (ListenerInfo) iter.next();
@@ -49,12 +48,12 @@ public class CoreHooks implements FindHook, ListenerHook {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public void removed(Collection coll) {
+	public void removed(@SuppressWarnings("rawtypes") Collection coll) {
 		// do nothing... (for now - later track what listener was removed)
 		if (coll == null || coll.isEmpty()) {
 			return;
 		}
+		@SuppressWarnings("rawtypes")
 		Iterator iter = coll.iterator();
 		while (iter.hasNext()) {
 			ListenerInfo li = (ListenerInfo) iter.next();

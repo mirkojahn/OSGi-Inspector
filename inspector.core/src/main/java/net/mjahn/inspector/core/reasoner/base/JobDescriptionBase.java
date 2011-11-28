@@ -17,7 +17,8 @@ public class JobDescriptionBase implements ModifyableJobDescription {
     private Throwable throwableTA;
     private Object objTA;
 
-    public JobDescriptionBase(JobDescription parentJobDescription) {
+    @SuppressWarnings("unchecked")
+	public JobDescriptionBase(JobDescription parentJobDescription) {
         id = parentJobDescription.getTaskId();
         parentJobDesc = parentJobDescription;
         tb = parentJobDescription.getSourceBundle();
